@@ -1,0 +1,13 @@
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+public class Test {
+
+	public static void main(String[] args) {
+		// TODO 自动生成的方法存根
+		SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd");
+		String regitime = sdf1.format(System.currentTimeMillis());
+		System.out.print(regitime);
+		
+}
+}

@@ -1,0 +1,168 @@
+package cn.zucc.edu.view;
+
+import java.awt.EventQueue;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.Connection;
+
+import javax.swing.JButton;
+import javax.swing.JInternalFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JTextField;
+
+import cn.zucc.edu.dao.PlayerDao;
+import cn.zucc.edu.dao.TeamDao;
+import cn.zucc.edu.models.BeanStuInfo;
+import cn.zucc.edu.models.BeanTeam;
+import cn.zucc.edu.util.DBUtil;
+import cn.zucc.edu.util.StringUtil;
+
+public class StuCptCreateTeamInterFrm extends JInternalFrame {
+	private JTextField teamId;
+	private JTextField teamName;
+	private JTextField teamNum;
+	private JButton btnNewButton;
+	private JButton btnNewButton_1;
+
+	PlayerDao play = new PlayerDao();
+	DBUtil dbUtil = new DBUtil();
+	TeamDao teamDao = new TeamDao();
+	private JLabel lblNewLabel_3;
+	private JTextField StuIdTxt;
+	
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					StuCptCreateTeamInterFrm frame = new StuCptCreateTeamInterFrm();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the frame.
+	 */
+	public StuCptCreateTeamInterFrm() {
+		setMaximizable(true);
+		setIconifiable(true);
+		setClosable(true);
+		setBounds(100, 100, 564, 383);
+		
+		JLabel lblNewLabel = new JLabel("队伍编号");
+		lblNewLabel.setBounds(127, 89, 83, 24);
+		lblNewLabel.setFont(new Font("宋体", Font.BOLD, 20));
+		
+		JLabel lblNewLabel_1 = new JLabel("队伍名称");
+		lblNewLabel_1.setBounds(127, 131, 83, 24);
+		lblNewLabel_1.setFont(new Font("宋体", Font.BOLD, 20));
+		
+		JLabel lblNewLabel_2 = new JLabel("队伍人数");
+		lblNewLabel_2.setBounds(127, 173, 83, 24);
+		lblNewLabel_2.setFont(new Font("宋体", Font.BOLD, 20));
+		
+		teamId = new JTextField();
+		teamId.setBounds(238, 89, 144, 21);
+		teamId.setColumns(10);
+		
+		teamName = new JTextField();
+		teamName.setBounds(238, 131, 144, 21);
+		teamName.setColumns(10);
+		
+		teamNum = new JTextField();
+		teamNum.setBounds(238, 173, 144, 21);
+		teamNum.setColumns(10);
+		
+		btnNewButton = new JButton("确认创建");
+		btnNewButton.setBounds(93, 224, 119, 33);
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				stuCreateTeamActionPerformed(e);
+			}
+		});
+		btnNewButton.setFont(new Font("宋体", Font.BOLD, 20));
+		
+		btnNewButton_1 = new JButton("重置");
+		btnNewButton_1.setBounds(310, 224, 119, 33);
+		btnNewButton_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				resetValueActionPerformed(e);
+			}
+		});
+		btnNewButton_1.setFont(new Font("宋体", Font.BOLD, 20));
+		getContentPane().setLayout(null);
+		getContentPane().add(btnNewButton);
+		getContentPane().add(lblNewLabel);
+		getContentPane().add(lblNewLabel_1);
+		getContentPane().add(lblNewLabel_2);
+		getContentPane().add(teamId);
+		getContentPane().add(teamName);
+		getContentPane().add(teamNum);
+		getContentPane().add(btnNewButton_1);
+		
+		lblNewLabel_3 = new JLabel("学号");
+		lblNewLabel_3.setFont(new Font("宋体", Font.BOLD, 20));
+		lblNewLabel_3.setBounds(127, 55, 83, 24);
+		getContentPane().add(lblNewLabel_3);
+		
+		StuIdTxt = new JTextField();
+		StuIdTxt.setColumns(10);
+		StuIdTxt.setBounds(238, 55, 144, 21);
+		getContentPane().add(StuIdTxt);
+
+	}
+	private void resetValueActionPerformed(ActionEvent e) {
+		// TODO 自动生成的方法存根
+		this.teamId.setText("");
+		this.teamName.setText("");
+		this.teamNum.setText("");
+	}
+
+	private void stuCreateTeamActionPerformed(ActionEvent evt) {
+		
+		String teamId = this.teamId.getText();
+		String teamName = this.teamName.getText();
+		String teamMemNum = this.teamNum.getText();
+		String stuId = this.StuIdTxt.getText();
+		
+		
+		if(StringUtil.isEmpty(stuId) ||StringUtil.isEmpty(teamId) || StringUtil.isEmpty(teamName) || StringUtil.isEmpty(teamMemNum)) {
+			JOptionPane.showMessageDialog(null, "请将队伍基本信息填写完整");
+			return;
+		}
+		BeanTeam team = new BeanTeam(teamId,teamName,Integer.parseInt(teamMemNum));
+		BeanStuInfo stu = new BeanStuInfo(stuId);
+		
+		Connection conn = null;
+		try{
+			conn = dbUtil.getConn();
+			int n = teamDao.add(conn, team, stu);
+			if(n == 1) {
+				JOptionPane.showMessageDialog(null, "队伍信息添加成功");
+				return;
+			}else {
+				JOptionPane.showMessageDialog(null, "队伍信息添加失败");
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+			JOptionPane.showMessageDialog(null, "队伍信息添加重复");
+		}finally {
+			try {
+				dbUtil.closeConn(conn);
+			}catch(Exception e)
+			{
+				e.printStackTrace();
+			}
+		}
+		
+	}
+
+}

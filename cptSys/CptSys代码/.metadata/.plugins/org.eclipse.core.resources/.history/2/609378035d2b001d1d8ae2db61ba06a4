@@ -1,0 +1,56 @@
+package cn.zucc.edu.dao;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+
+import cn.zucc.edu.models.BeanStuInfo;
+import cn.zucc.edu.util.BaseException;
+import cn.zucc.edu.util.DbException;
+
+public class ChangePwdDao {
+
+
+//	public int changePwd(Connection conn, BeanStuInfo stuInfo) throws Exception{
+//		
+//		String sql = "update stu_info set StuPsw=? where StuId=?";
+//		PreparedStatement pstmt = conn.prepareStatement(sql);
+//		pstmt.setString(1, stuInfo.getStuPsw());
+//		pstmt.setString(2, stuInfo.getStuId());
+//		
+//		return pstmt.executeUpdate();
+//	}
+	/**
+	 * 修改密码功能
+	 * @param stuInfo
+	 * @return
+	 * @throws BaseException
+	 */
+	public int changePwd(BeanStuInfo stuInfo) throws BaseException{
+
+		Connection conn = null;
+		String sql = "update stu_info set StuPsw=? where StuId=?";
+		
+		try {
+			PreparedStatement pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, stuInfo.getStuPsw());
+			pstmt.setString(2, stuInfo.getStuId());
+			int n = pstmt.executeUpdate();//executeUpdate执行成功返回1，失败返回0
+			return n;
+		} catch (SQLException e) {
+			// TODO 自动生成的 catch 块
+			e.printStackTrace();
+		}finally {
+            if (conn != null)
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+        }
+
+		return 0;//如果上面的n没有返回1，那么下面就返回0，即代表失败
+		
+	}
+}

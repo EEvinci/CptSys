@@ -1,0 +1,197 @@
+package cn.zucc.edu.view;
+
+import java.awt.EventQueue;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.ResultSet;
+
+import javax.swing.JButton;
+import javax.swing.JInternalFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JTextField;
+
+import cn.zucc.edu.dao.TeamUpDao;
+import cn.zucc.edu.models.BeanCptInfo;
+import cn.zucc.edu.models.BeanTeamUp;
+import cn.zucc.edu.util.DBUtil;
+import cn.zucc.edu.util.StringUtil;
+
+public class StuCptTeamUpInterFrm extends JInternalFrame {
+	private JTextField textField_1;
+	private JTextField textField_3;
+	private JTextField textField_5;
+	
+	DBUtil dbUtil = new DBUtil();
+	TeamUpDao teamUpDao = new TeamUpDao();
+	private JTextField IsLeaderTxt;
+	private JTextField IsPtcptTxt;
+
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					StuCptTeamUpInterFrm frame = new StuCptTeamUpInterFrm();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the frame.
+	 */
+	public StuCptTeamUpInterFrm() {
+		setMaximizable(true);
+		setIconifiable(true);
+		setClosable(true);
+		setTitle("学生竞赛组队");
+		setBounds(100, 100, 1013, 603);
+		getContentPane().setLayout(null);
+		
+		JLabel lblNewLabel = new JLabel("学号");
+		lblNewLabel.setFont(new Font("宋体", Font.BOLD, 27));
+		lblNewLabel.setBounds(104, 112, 120, 32);
+		getContentPane().add(lblNewLabel);
+		
+		textField_1 = new JTextField();
+		textField_1.setColumns(10);
+		textField_1.setBounds(234, 112, 230, 32);
+		getContentPane().add(textField_1);
+		
+		JLabel lblNewLabel_2 = new JLabel("组队编号");
+		lblNewLabel_2.setFont(new Font("宋体", Font.BOLD, 27));
+		lblNewLabel_2.setBounds(507, 112, 120, 32);
+		getContentPane().add(lblNewLabel_2);
+		
+		textField_3 = new JTextField();
+		textField_3.setColumns(10);
+		textField_3.setBounds(637, 112, 230, 32);
+		getContentPane().add(textField_3);
+		
+		JLabel lblNewLabel_4 = new JLabel("竞赛编号");
+		lblNewLabel_4.setFont(new Font("宋体", Font.BOLD, 27));
+		lblNewLabel_4.setBounds(93, 189, 120, 32);
+		getContentPane().add(lblNewLabel_4);
+		
+		textField_5 = new JTextField();
+		textField_5.setColumns(10);
+		textField_5.setBounds(223, 189, 230, 32);
+		getContentPane().add(textField_5);
+		
+		JButton btnNewButton = new JButton("添加");
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				CptRegiActionPerformed(e);
+			}
+		});
+		btnNewButton.setFont(new Font("宋体", Font.BOLD, 30));
+		btnNewButton.setBounds(327, 397, 120, 43);
+		getContentPane().add(btnNewButton);
+		
+		JButton btnNewButton_1 = new JButton("重置");
+		btnNewButton_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				resetValueActionPerformed(e);
+			}
+		});
+		btnNewButton_1.setFont(new Font("宋体", Font.BOLD, 30));
+		btnNewButton_1.setBounds(571, 397, 120, 43);
+		getContentPane().add(btnNewButton_1);
+		
+		JLabel lblNewLabel_4_1 = new JLabel("是否是队长");
+		lblNewLabel_4_1.setFont(new Font("宋体", Font.BOLD, 27));
+		lblNewLabel_4_1.setBounds(496, 189, 140, 32);
+		getContentPane().add(lblNewLabel_4_1);
+		
+		IsLeaderTxt = new JTextField();
+		IsLeaderTxt.setColumns(10);
+		IsLeaderTxt.setBounds(646, 189, 230, 32);
+		getContentPane().add(IsLeaderTxt);
+		
+		JLabel lblNewLabel_4_2 = new JLabel("是否同意参赛");
+		lblNewLabel_4_2.setFont(new Font("宋体", Font.BOLD, 27));
+		lblNewLabel_4_2.setBounds(284, 263, 180, 32);
+		getContentPane().add(lblNewLabel_4_2);
+		
+		IsPtcptTxt = new JTextField();
+		IsPtcptTxt.setColumns(10);
+		IsPtcptTxt.setBounds(474, 263, 230, 32);
+		getContentPane().add(IsPtcptTxt);
+
+	}
+	
+	
+	/**
+	 * 添加组队信息
+	 * @param evt
+	 */
+	private void CptRegiActionPerformed(ActionEvent evt){
+
+		String StuId = this.textField_1.getText();
+		String TeamId = this.textField_3.getText();
+		String cptId = this.textField_5.getText();
+		String IsLeader = this.IsLeaderTxt.getText();
+		String IsPtcpt = this.IsPtcptTxt.getText();
+		
+		if(StringUtil.isEmpty(StuId) || StringUtil.isEmpty(TeamId) 
+				|| StringUtil.isEmpty(cptId) || StringUtil.isEmpty(IsLeader) 
+				|| StringUtil.isEmpty(IsPtcpt)){
+			JOptionPane.showMessageDialog(null, "请将报名信息填写完整");
+			return;
+		}
+		BeanTeamUp teamup = new BeanTeamUp(StuId,TeamId,cptId,IsLeader,IsPtcpt);
+		Connection conn = null;
+		try{
+			conn = dbUtil.getConn();
+			int n = teamUpDao.add(conn,teamup);
+			
+//			if(StuId.equals(teamup.getStuId()) && TeamId.equals(teamup.getCptId())) {
+//					JOptionPane.showMessageDialog(null, "请勿重复报名");
+//					return;
+//			}
+//			else if(StuId.equals(teamup.getStuId()) && cptId.equals(teamup.getTeamId())) {
+//					JOptionPane.showMessageDialog(null, "组队信息重复");
+//					return;
+//			}
+			
+			if(n == 1) {
+				JOptionPane.showMessageDialog(null, "组队信息添加成功");
+				
+			}
+			else {
+				JOptionPane.showMessageDialog(null, "组队信息添加失败");
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+			JOptionPane.showMessageDialog(null, "组队信息添加重复");
+			}finally {
+				try {
+					dbUtil.closeConn(conn);
+				}
+				catch(Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	
+	/**
+	 * 重置函数
+	 * @param e
+	 */
+	private void resetValueActionPerformed(ActionEvent e) {
+		this.textField_1.setText("");
+		this.textField_2.setText("");
+		this.textField_3.setText("");
+		this.textField_4.setText("");
+		this.textField_5.setText("");
+	}
+	
+}

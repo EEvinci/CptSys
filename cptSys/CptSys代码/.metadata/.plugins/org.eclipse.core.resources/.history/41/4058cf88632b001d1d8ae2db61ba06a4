@@ -1,0 +1,41 @@
+package cn.zucc.edu.dao;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+
+import cn.zucc.edu.models.BeanStuInfo;
+
+public class StuDao {
+
+	/**
+	 * 学生信息添加
+	 * @param conn
+	 * @param stuInfo
+	 * @return
+	 * @throws Exception
+	 */
+	public int add(Connection conn, BeanStuInfo stuInfo) throws Exception{
+		String sql = "insert into stu_info values(?,?,?,?,?,?,?)";
+		
+		PreparedStatement pstmt = conn.prepareStatement(sql);
+		
+		/*
+	private String StuId;
+	private String Name;
+	private	String StuPsw;
+	private String SClass;
+	private String Grade;
+	private String Profess;
+	private String PhoneNum;
+		 */
+		pstmt.setString(1, stuInfo.getStuId());
+		pstmt.setString(2, stuInfo.getName());
+		pstmt.setString(3, stuInfo.getStuPsw());
+		pstmt.setString(4, stuInfo.getSClass());
+		pstmt.setString(5, stuInfo.getGrade());
+		pstmt.setString(6, stuInfo.getProfess());
+		pstmt.setString(7, stuInfo.getPhoneNum());
+			
+		return pstmt.executeUpdate();
+	}
+}

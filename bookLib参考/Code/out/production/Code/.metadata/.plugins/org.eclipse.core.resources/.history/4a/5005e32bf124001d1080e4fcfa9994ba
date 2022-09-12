@@ -1,0 +1,53 @@
+import java.awt.EventQueue;
+
+import javax.swing.JFrame;
+import javax.swing.JTextPane;
+import javax.swing.JToggleButton;
+import javax.swing.JButton;
+
+public class SwingTest {
+
+	private JFrame frame;
+
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					SwingTest window = new SwingTest();
+					window.frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the application.
+	 */
+	public SwingTest() {
+		initialize();
+	}
+
+	/**
+	 * Initialize the contents of the frame.
+	 */
+	private void initialize() {
+		frame = new JFrame();
+		frame.setBounds(900, 100, 450, 300);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.getContentPane().setLayout(null);
+		
+		JTextPane textPane = new JTextPane();
+		textPane.setBounds(49, 45, 113, 51);
+		frame.getContentPane().add(textPane);
+		
+		JButton btnNewButton = new JButton("New button");
+		
+		btnNewButton.setBounds(172, 45, 135, 51);
+		frame.getContentPane().add(btnNewButton);
+	}
+}

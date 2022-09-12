@@ -1,0 +1,13 @@
+package cn.zucc.edu.dao;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+
+import cn.zucc.edu.models.BeanStuInfo;
+import cn.zucc.edu.util.BaseException;
+import cn.zucc.edu.util.DbException;
+
+public class ChangePwdDao {
+
+}

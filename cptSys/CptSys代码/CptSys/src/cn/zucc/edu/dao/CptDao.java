@@ -1,0 +1,245 @@
+package cn.zucc.edu.dao;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import cn.zucc.edu.models.BeanCptInfo;
+import cn.zucc.edu.models.BeanStuInfo;
+import cn.zucc.edu.models.BeanTeamUp;
+import cn.zucc.edu.util.BaseException;
+import cn.zucc.edu.util.DbException;
+import cn.zucc.edu.util.StringUtil;
+
+/**
+ * 竞赛信息管理
+ * @author PC
+ *
+ */
+public class CptDao {
+
+	/**
+	 * 添加竞赛信息
+	 * @param conn
+	 * @param cptInfo
+	 * @return
+	 * @throws Exception
+	 */
+	public int add(Connection conn, BeanCptInfo cptInfo) throws BaseException{
+		
+		int rs = 0;
+		String sql = "insert into cpt_info values(?,?,?,?,?,?,?,?,?,?)";
+		
+		try {
+			PreparedStatement pstmt = conn.prepareStatement(sql);
+
+			pstmt.setString(1, cptInfo.getCptId());
+			pstmt.setString(2, cptInfo.getCptItemId());
+			pstmt.setString(3, cptInfo.getCptName());
+			pstmt.setString(4, cptInfo.getCptYear());
+			pstmt.setString(5, cptInfo.getHoldYear());
+			pstmt.setString(6, cptInfo.getHoldDay());
+			pstmt.setString(7, cptInfo.getRegiStart());
+			pstmt.setString(8, cptInfo.getRegiEnd());
+			pstmt.setString(9, cptInfo.getContact());
+			pstmt.setString(10, cptInfo.getWeb());
+			
+			rs = pstmt.executeUpdate();
+			
+			return rs;
+		}catch(SQLException e) {
+			e.printStackTrace();
+			throw new DbException(e);
+		}finally {
+			try {
+				conn.close();
+			}catch(SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+/**
+ * 查询竞赛信息
+ * @param conn
+ * @param cptInfo
+ * @return
+ * @throws BaseException
+ */
+	public ResultSet query(Connection conn,BeanCptInfo cptInfo)throws BaseException{
+
+		ResultSet rs = null;
+		StringBuffer sb = new StringBuffer("select * from cpt_info");
+		
+		try {
+			if(StringUtil.isNotEmpty(cptInfo.getCptId())){
+				sb.append(" and CptId = " + cptInfo.getCptId());
+			}
+			PreparedStatement pstmt = conn.prepareStatement(sb.toString().replaceFirst("and", "where"));
+			rs = pstmt.executeQuery();
+			return rs;
+		}catch(SQLException e){
+			e.printStackTrace();
+			throw new DbException(e);
+		}
+	}
+	
+	/**
+	 * 删除竞赛信息
+	 * @param conn
+	 * @param cptInfo
+	 * @return
+	 * @throws BaseException
+	 */
+	public int delete(Connection conn, String id) throws BaseException{
+		int rs = 0;
+		String sql = "delete from cpt_info where CptId = ?";
+		
+		try {
+			PreparedStatement pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1,id);
+			rs = pstmt.executeUpdate();
+			return rs;
+		}catch(SQLException e) {
+			e.printStackTrace();
+			throw new DbException(e);
+		}finally {
+			try {
+				conn.close();
+			}catch(SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	
+	/**
+	 * 修改竞赛信息
+	 * @param conn
+	 * @param cptInfo
+	 * @return
+	 * @throws BaseException
+	 */
+	public int update(Connection conn, BeanCptInfo cptInfo) throws BaseException{
+		int rs = 0;
+		String sql = "update cpt_info set CptItemId=?, CptName=?, CptYear=?, HoldYear=?, HoldDay=?, RegiStart=?, RegiEnd=?, Contact=?, Web=? where CptId=?";
+		
+		try {
+			PreparedStatement pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setString(1, cptInfo.getCptItemId());
+			pstmt.setString(2, cptInfo.getCptName());
+			pstmt.setString(3, cptInfo.getCptYear());
+			pstmt.setString(4, cptInfo.getHoldYear());
+			pstmt.setString(5, cptInfo.getHoldDay());
+			pstmt.setString(6, cptInfo.getRegiStart());
+			pstmt.setString(7, cptInfo.getRegiEnd());
+			pstmt.setString(8, cptInfo.getContact());
+			pstmt.setString(9, cptInfo.getWeb());
+			pstmt.setString(10, cptInfo.getCptId());
+			
+			rs = pstmt.executeUpdate();
+			return rs;
+		}catch(SQLException e) {
+			e.printStackTrace();
+			throw new DbException(e);
+		}finally {
+			try {
+				conn.close();
+			}catch(SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	
+	/**
+	 * 查询竞赛报名信息
+	 * @param conn
+	 * @param cptInfo
+	 * @return
+	 * @throws BaseException
+	 */
+	public ResultSet queryCptRegi(Connection conn, BeanCptInfo cptInfo) throws BaseException{
+		
+		ResultSet rs = null;
+		StringBuffer sb = new StringBuffer("select stu_info.StuId, stu_info.Name, team.TeamId, cpt_info.CptName, "
+				+ "cpt_itm_info.CptItemName, stu_info.SClass, stu_info.Grade, stu_info.Profess, register.RegiTime, register.RegiStatus "
+				+ "from cpt_info,cpt_itm_info,stu_info,team,team_up,register");
+		
+		try {
+			if(StringUtil.isEmpty(cptInfo.getCptName()) && StringUtil.isEmpty(cptInfo.getHoldYear())){
+				sb.append(" and team_up.TeamId = team.TeamId and team_up.StuId = stu_info.StuId and team.TeamId = register.TeamId "
+						+ "and register.CptId = cpt_info.CptId and cpt_info.CptItemId = cpt_itm_info.CptItemId ");
+			}
+			else if(StringUtil.isNotEmpty(cptInfo.getCptName()) && StringUtil.isEmpty(cptInfo.getHoldYear())){
+				sb.append(" and team_up.TeamId = team.TeamId and team_up.StuId = stu_info.StuId and team.TeamId = register.TeamId "
+						+ "and register.CptId = cpt_info.CptId and cpt_info.CptItemId = cpt_itm_info.CptItemId "
+						+ "and cpt_info.CptName like '%"+ cptInfo.getCptName() +"%'");
+			}
+			else if(StringUtil.isEmpty(cptInfo.getCptName()) && StringUtil.isNotEmpty(cptInfo.getHoldYear())){
+				sb.append(" and team_up.TeamId = team.TeamId and team_up.StuId = stu_info.StuId and team.TeamId = register.TeamId "
+						+ "and register.CptId = cpt_info.CptId and cpt_info.CptItemId = cpt_itm_info.CptItemId "
+						+ "and cpt_info.HoldYear = "+ cptInfo.getHoldYear());
+			}
+			else if(StringUtil.isNotEmpty(cptInfo.getCptName()) && StringUtil.isNotEmpty(cptInfo.getHoldYear())){
+				sb.append(" and team_up.TeamId = team.TeamId and team_up.StuId = stu_info.StuId and team.TeamId = register.TeamId "
+						+ "and register.CptId = cpt_info.CptId and cpt_info.CptItemId = cpt_itm_info.CptItemId "
+						+ "and cpt_info.CptName like '%"+ cptInfo.getCptName() +"%' and cpt_info.HoldYear = "+ cptInfo.getHoldYear());
+			}
+			PreparedStatement pstmt = conn.prepareStatement(sb.toString().replaceFirst("and", "where"));
+			rs = pstmt.executeQuery();
+			return rs;
+		}catch(SQLException e){
+			e.printStackTrace();
+			throw new DbException(e);
+		}
+	}
+	
+	
+	/**
+	 * 查询竞赛获奖信息
+	 * @param conn
+	 * @param cptInfo
+	 * @return
+	 * @throws BaseException
+	 */
+	public ResultSet queryCptRwd(Connection conn, BeanCptInfo cptInfo) throws BaseException{
+		
+		ResultSet rs = null;
+		StringBuffer sb = new StringBuffer("select cpt_itm_info.CptItemName,cpt_info.CptName, team.RwdGrade, stu_info.StuId, "
+				+ "stu_info.Name, team.TeamId,  stu_info.SClass, stu_info.Grade, stu_info.Profess from cpt_info,cpt_itm_info,stu_info,team,team_up ");
+		
+		try {
+			if(StringUtil.isEmpty(cptInfo.getCptName()) && StringUtil.isEmpty(cptInfo.getHoldYear())){
+				sb.append(" and stu_info.StuId = team_up.StuId and team_up.TeamId = team.TeamId and team_up.CptId = cpt_info.CptId "
+						+ "and cpt_info.CptItemId = cpt_itm_info.CptItemId and team.IsFinCpt = '是'");
+			}
+			else if(StringUtil.isEmpty(cptInfo.getCptName()) && StringUtil.isNotEmpty(cptInfo.getHoldYear())){
+				sb.append(" and stu_info.StuId = team_up.StuId and team_up.TeamId = team.TeamId and team_up.CptId = cpt_info.CptId "
+						+ " and cpt_info.CptItemId = cpt_itm_info.CptItemId and team.IsFinCpt = '是' "
+						+ " and cpt_info.HoldYear = '"+ cptInfo.getHoldYear() +"'");
+			}
+			else if(StringUtil.isNotEmpty(cptInfo.getCptName()) && StringUtil.isEmpty(cptInfo.getHoldYear())) {
+				sb.append(" and stu_info.StuId = team_up.StuId and team_up.TeamId = team.TeamId and team_up.CptId = cpt_info.CptId "
+						+ " and cpt_info.CptItemId = cpt_itm_info.CptItemId and team.IsFinCpt = '是' and cpt_info.CptName like '%"+ cptInfo.getCptName() +"%'");
+			}
+			else if(StringUtil.isNotEmpty(cptInfo.getCptName()) && StringUtil.isNotEmpty(cptInfo.getHoldYear())) {
+				sb.append(" and stu_info.StuId = team_up.StuId and team_up.TeamId = team.TeamId and team_up.CptId = cpt_info.CptId "
+						+ "and cpt_info.CptItemId = cpt_itm_info.CptItemId and team.IsFinCpt = '是' "
+						+ "and cpt_info.CptName like '%"+ cptInfo.getCptName() +"%' and cpt_info.HoldYear = '"+ cptInfo.getHoldYear() +"'");
+			}
+
+			PreparedStatement pstmt = conn.prepareStatement(sb.toString().replaceFirst("and", "where"));
+			rs = pstmt.executeQuery();
+			
+			return rs;
+		}catch(SQLException e){
+			e.printStackTrace();
+			throw new DbException(e);
+		}
+	}
+	
+	
+}

@@ -1,0 +1,98 @@
+package cn.zucc.edu.dao;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import cn.zucc.edu.models.BeanTeam;
+import cn.zucc.edu.models.BeanTeamUp;
+import cn.zucc.edu.util.BaseException;
+import cn.zucc.edu.util.DbException;
+import cn.zucc.edu.util.StringUtil;
+
+/**
+ * 组队信息管理
+ * @author PC
+ *
+ */
+public class TeamUpDao {
+	
+	/**
+	 * 查询组队信息
+	 * @param conn
+	 * @param teamup
+	 * @return
+	 * @throws BaseException
+	 */
+	public ResultSet queryTeamUpInfo(Connection conn, BeanTeamUp teamup) throws BaseException{
+		
+		StringBuffer sb = new StringBuffer("select stu_info.StuId, stu_info.Name, team.TeamId, team.TeamName, "
+				+ "stu_info.PhoneNum, team_up.CptId from stu_info,team,team_up");
+		ResultSet rs = null;
+		
+		try {
+			if(StringUtil.isEmpty(teamup.getTeamId()) && StringUtil.isEmpty(teamup.getCptId())) {
+				sb.append(" and stu_info.StuID = team_up.StuId and team.TeamId = team_up.TeamId "
+						+ "and team_up.IsPtcpt = '是' order by stu_info.StuId");	
+			}
+			else if(StringUtil.isNotEmpty(teamup.getTeamId()) && StringUtil.isEmpty(teamup.getCptId())) {
+				sb.append(" and stu_info.StuID = team_up.StuId and team.TeamId = team_up.TeamId "
+						+ "and team_up.IsPtcpt = '是' and team_up.TeamID="+ teamup.getTeamId() +" order by stu_info.StuId");	
+			}
+			else if(StringUtil.isEmpty(teamup.getTeamId()) && StringUtil.isNotEmpty(teamup.getCptId())) {
+				sb.append(" and stu_info.StuID = team_up.StuId and team.TeamId = team_up.TeamId "
+						+ "and team_up.IsPtcpt = '是' and team_up.CptID="+ teamup.getCptId() +" order by stu_info.StuId");	
+			}
+			else if(StringUtil.isNotEmpty(teamup.getTeamId()) && StringUtil.isNotEmpty(teamup.getCptId())) {
+				sb.append(" and stu_info.StuID = team_up.StuId and team.TeamId = team_up.TeamId "
+						+ "and team_up.IsPtcpt = '是' and team_up.TeamID="+ teamup.getTeamId() 
+						+" and team_up.CptID="+ teamup.getCptId() +" order by stu_info.StuId");	
+			}
+			PreparedStatement pstmt = conn.prepareStatement(sb.toString().replaceFirst("and", "where"));
+			rs = pstmt.executeQuery();
+			
+			return rs;
+		}catch(SQLException e) {
+			e.printStackTrace();
+			throw new DbException(e);
+		}		
+	}
+	
+	
+	/**
+	 * 组队信息添加
+	 * @param conn
+	 * @param team
+	 * @return
+	 * @throws Exception
+	 */
+	public int add(Connection conn, BeanTeamUp teamup) throws BaseException{
+		
+		String sql = "insert into team_up(StuId,StuName,TeamId,TeamName,CptId) values(?,?,?,?,?)";
+		
+		try {
+			PreparedStatement pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setString(1,teamup.getStuId());
+			pstmt.setString(2,teamup.getStuName());
+			pstmt.setString(3,teamup.getTeamId());
+			pstmt.setString(4,teamup.getTeamName());
+			pstmt.setString(5,teamup.getCptId());
+			
+			return pstmt.executeUpdate();
+		}catch (SQLException e) {
+            e.printStackTrace();
+            throw new DbException(e);
+        } finally {
+            if (conn != null)
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+        }
+	}
+	
+}

@@ -1,0 +1,12 @@
+import java.text.SimpleDateFormat;
+import java.util.Date;
+public class Test {
+
+	public static void main(String[] args) {
+		// TODO 自动生成的方法存根
+		SimpleDateFormat formatter = new SimpleDateFormat( "yyyy-MM-dd ");
+	    String date = formatter.format(new Date());//格式化数据，取当前时间结果为 2014-10-30
+	    System.out.print(date);
+	}
+
+}

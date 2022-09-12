@@ -1,0 +1,195 @@
+package cn.zucc.edu.view;
+
+import java.awt.EventQueue;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.Connection;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+import javax.swing.JTextField;
+import javax.swing.border.EmptyBorder;
+
+import cn.zucc.edu.dao.ChangePwdDao;
+import cn.zucc.edu.dao.CptDao;
+import cn.zucc.edu.dao.StuLogDao;
+import cn.zucc.edu.models.BeanStuInfo;
+import cn.zucc.edu.util.DBUtil;
+import cn.zucc.edu.util.StringUtil;
+
+public class StuChangePwdFrm extends JFrame {
+
+	private JPanel contentPane;
+	
+	private JTextField StuIdTxt;
+	private JPasswordField OldPwdTxt;
+	private JPasswordField NewPwdTxt;
+	private JPasswordField CfrmPwdTxt;
+
+	private DBUtil dbUtil = new DBUtil();
+	private ChangePwdDao changepwdDao = new ChangePwdDao();
+	private StuLogDao stuLogDao = new StuLogDao();
+
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					StuChangePwdFrm frame = new StuChangePwdFrm();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the frame.
+	 */
+	public StuChangePwdFrm() {
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 576, 385);
+		contentPane = new JPanel();
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		setContentPane(contentPane);
+		
+		JLabel lblNewLabel = new JLabel("学    号");
+		lblNewLabel.setBounds(128, 40, 83, 24);
+		lblNewLabel.setFont(new Font("宋体", Font.BOLD, 20));
+		
+		JLabel lblNewLabel_1 = new JLabel("原 密 码");
+		lblNewLabel_1.setBounds(128, 90, 83, 24);
+		lblNewLabel_1.setFont(new Font("宋体", Font.BOLD, 20));
+		
+		JLabel lblNewLabel_1_1 = new JLabel("新 密 码");
+		lblNewLabel_1_1.setBounds(128, 140, 83, 24);
+		lblNewLabel_1_1.setFont(new Font("宋体", Font.BOLD, 20));
+		
+		JLabel lblNewLabel_1_1_1 = new JLabel("确认密码");
+		lblNewLabel_1_1_1.setBounds(128, 190, 83, 24);
+		lblNewLabel_1_1_1.setFont(new Font("宋体", Font.BOLD, 20));
+		
+		StuIdTxt = new JTextField();
+		StuIdTxt.setBounds(252, 39, 168, 21);
+		StuIdTxt.setColumns(10);
+		contentPane.setLayout(null);
+		contentPane.add(lblNewLabel_1);
+		contentPane.add(lblNewLabel);
+		contentPane.add(lblNewLabel_1_1_1);
+		contentPane.add(lblNewLabel_1_1);
+		contentPane.add(StuIdTxt);
+		
+		OldPwdTxt = new JPasswordField();
+		OldPwdTxt.setBounds(252, 85, 168, 21);
+		contentPane.add(OldPwdTxt);
+		
+		NewPwdTxt = new JPasswordField();
+		NewPwdTxt.setBounds(252, 136, 168, 21);
+		contentPane.add(NewPwdTxt);
+		
+		CfrmPwdTxt = new JPasswordField();
+		CfrmPwdTxt.setBounds(252, 186, 168, 21);
+		contentPane.add(CfrmPwdTxt);
+		
+		JButton ChangeTxt = new JButton("修改");
+		ChangeTxt.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				changePwdActionPerformed(e);
+			}
+		});
+		ChangeTxt.setFont(new Font("宋体", Font.BOLD, 20));
+		ChangeTxt.setBounds(94, 252, 104, 39);
+		contentPane.add(ChangeTxt);
+		
+		JButton ResetTxt = new JButton("重置");
+		ResetTxt.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				resetValueActionPerformed(e);
+			}
+		});
+		ResetTxt.setFont(new Font("宋体", Font.BOLD, 20));
+		ResetTxt.setBounds(229, 252, 104, 39);
+		contentPane.add(ResetTxt);
+		
+		JButton btnNewButton_1_1 = new JButton("退出");
+		btnNewButton_1_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				StuLogOnFrm_1 stuLog = new StuLogOnFrm_1();
+				int n = JOptionPane.showConfirmDialog(null, "即将返回学生登陆界面");
+				if(n == 0)
+				{
+					stuLog.setVisible(true);
+					dispose();
+				}			
+			}
+		});
+		btnNewButton_1_1.setFont(new Font("宋体", Font.BOLD, 20));
+		btnNewButton_1_1.setBounds(353, 252, 104, 39);
+		contentPane.add(btnNewButton_1_1);
+	}
+
+	private void changePwdActionPerformed(ActionEvent evt) {
+		// TODO 自动生成的方法存根
+		/*
+	private JTextField StuIdTxt;
+	private JPasswordField OldPwdTxt;
+	private JPasswordField NewPwdTxt;
+	private JPasswordField CfrmPwdTxt;
+		 */
+		String stuId = this.StuIdTxt.getText();
+		String oldPwd = this.OldPwdTxt.getText();
+		String newPwd = this.NewPwdTxt.getText();
+		String CfrmPwd = this.CfrmPwdTxt.getText();
+	
+		if( StringUtil.isEmpty(stuId) || StringUtil.isEmpty(oldPwd) ||StringUtil.isEmpty(newPwd) || StringUtil.isEmpty(CfrmPwd) ){
+		    JOptionPane.showMessageDialog(null,"请将信息输入完整");
+		}
+		
+		Connection conn = null;
+		BeanStuInfo stuInfoOld = new BeanStuInfo(stuId,oldPwd);
+		BeanStuInfo stuInfoNew =new BeanStuInfo(stuId,newPwd);
+		
+		try {
+			conn = dbUtil.getConn();
+			BeanStuInfo currentStu = stuLogDao.login(conn, stuInfoOld);
+			if(currentStu == null){
+				JOptionPane.showConfirmDialog(null, "用户名或原密码错误!");
+			}
+//			if())
+			int n = changepwdDao.changePwd(conn, stuInfoNew);
+			if(n == 1) {
+				JOptionPane.showMessageDialog(null, "修改密码成功");
+			}
+			else {
+				JOptionPane.showMessageDialog(null, "修改密码失败");
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+			
+		}
+		finally {
+			try {
+				dbUtil.closeConn(conn);
+			}catch(Exception e){
+				e.printStackTrace();
+			}
+		}
+	}
+
+	private void resetValueActionPerformed(ActionEvent e) {
+		// TODO 自动生成的方法存根
+		this.StuIdTxt.setText("");
+		this.OldPwdTxt.setText("");
+		this.NewPwdTxt.setText("");
+		this.CfrmPwdTxt.setText("");
+		
+	}
+}

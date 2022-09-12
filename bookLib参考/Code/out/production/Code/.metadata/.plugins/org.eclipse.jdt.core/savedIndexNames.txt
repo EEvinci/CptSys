@@ -1,0 +1,5 @@
+INDEX VERSION 1.131+D:\BigThree\ShortTerm\Code\Booklib-src(UTF-8)\src\.metadata\.plugins\org.eclipse.jdt.core
+3969290879.index
+817670785.index
+1557175354.index
+1865797976.index

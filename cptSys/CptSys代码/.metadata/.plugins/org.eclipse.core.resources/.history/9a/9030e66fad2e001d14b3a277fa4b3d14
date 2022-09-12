@@ -1,0 +1,187 @@
+package cn.zucc.edu.dao;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import cn.zucc.edu.models.BeanTeam;
+import cn.zucc.edu.models.BeanTeamUp;
+import cn.zucc.edu.util.BaseException;
+import cn.zucc.edu.util.DbException;
+import cn.zucc.edu.util.StringUtil;
+
+/**
+ * 队伍信息管理
+ * @author PC
+ *
+ */
+public class TeamDao {
+
+	public int stuAdd(Connection conn,BeanTeam team) throws BaseException{
+		
+		int rs = 0;
+		String sql = "insert into team values(?,?,?)";
+		
+		try {
+			PreparedStatement pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setString(1,team.getTeamId());
+			pstmt.setString(2,team.getTeamName());
+			pstmt.setInt(3,team.getMemNum());
+			
+			rs = pstmt.executeUpdate();
+			
+			return rs;
+		}catch (SQLException e) {
+            e.printStackTrace();
+        } 
+		return rs;
+	}
+	
+	/**
+	 * 管理员模式队伍添加
+	 * @param conn
+	 * @param team
+	 * @return
+	 * @throws Exception
+	 */
+	public int add(Connection conn, BeanTeam team) throws BaseException{
+		
+		int rs = 0;
+		String sql = "insert into team values(?,?,?,?)";
+		
+		try {
+			PreparedStatement pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setString(1,team.getTeamId());
+			pstmt.setString(2,team.getTeamName());
+			pstmt.setInt(3,team.getMemNum());
+			pstmt.setString(4,team.getRwdGrade());
+			pstmt.setString(5,team.getIsFinCpt());
+			
+			rs = pstmt.executeUpdate();
+			
+			return rs;
+		}catch (SQLException e) {
+            e.printStackTrace();
+        } 
+		return rs;
+	}
+	
+	/**
+	 * 查询队伍信息
+	 * @param conn
+	 * @param team
+	 * @return
+	 * @throws BaseException
+	 */
+	public ResultSet query(Connection conn,BeanTeam team)throws BaseException{
+
+		ResultSet rs = null;
+		StringBuffer sb = new StringBuffer("select * from team");
+		
+		try {
+			if(StringUtil.isNotEmpty(team.getTeamId())){
+				sb.append(" and TeamId = " + team.getTeamId());
+			}
+			PreparedStatement pstmt = conn.prepareStatement(sb.toString().replaceFirst("and", "where"));
+			rs = pstmt.executeQuery();
+			
+			return rs;
+		}catch(SQLException e){
+			e.printStackTrace();
+			throw new DbException(e);
+		}
+	}
+	
+	
+	/**
+	 * 修改队伍信息
+	 * @param conn
+	 * @param cptInfo
+	 * @return
+	 * @throws BaseException
+	 */
+	public int update(Connection conn, BeanTeam team) throws BaseException{
+		
+		int rs = 0;
+		String sql = "update team set TeamName=?, MemNum=?, RwdGrade=?, IsFinCpt=? where TeamId=? and ";
+		
+		try {
+			PreparedStatement pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setString(1, team.getTeamName());
+			pstmt.setInt(2, team.getMemNum());
+			pstmt.setString(3, team.getRwdGrade());
+			pstmt.setString(4, team.getIsFinCpt());
+			pstmt.setString(5, team.getTeamId());
+			
+			rs = pstmt.executeUpdate();
+			return rs;
+		}catch(SQLException e) {
+			e.printStackTrace();
+			throw new DbException(e);
+		}finally {
+			try {
+				conn.close();
+			}catch(SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+
+	/**
+	 * 删除队伍信息
+	 * @param conn
+	 * @param team
+	 * @return
+	 * @throws BaseException
+	 */
+	public int delete(Connection conn, String id) throws BaseException{
+		
+		int rs = 0;
+		String sql = "delete from team where TeamId = ?";
+		
+		try {
+			PreparedStatement pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setString(1,id);
+			rs = pstmt.executeUpdate();
+			
+			return rs;
+		}catch(SQLException e) {
+			e.printStackTrace();
+			throw new DbException(e);
+		}finally {
+			try {
+				conn.close();
+			}catch(SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	/**
+	 * 队伍人数统计
+	 */
+	public ResultSet teamMemNum(Connection conn, BeanTeam team) throws BaseException{
+		ResultSet n = null;
+		String sql = "select MemNum TeamMemNum from team where TeamId = ?";
+		
+		try {
+			PreparedStatement pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setString(1, team.getTeamId());
+			n = pstmt.executeQuery();
+			
+			return n;
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		return n;
+	}
+	
+	
+}

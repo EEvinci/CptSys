@@ -1,0 +1,73 @@
+package cn.zucc.edu.view;
+
+import java.awt.EventQueue;
+
+import javax.swing.JInternalFrame;
+import javax.swing.GroupLayout;
+import javax.swing.GroupLayout.Alignment;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
+
+public class AdminRUDCptItemInterFrm extends JInternalFrame {
+	private JTable table;
+
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					AdminRUDCptItemInterFrm frame = new AdminRUDCptItemInterFrm();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the frame.
+	 */
+	public AdminRUDCptItemInterFrm() {
+		setBounds(100, 100, 1017, 600);
+		
+		JScrollPane scrollPane = new JScrollPane();
+		GroupLayout groupLayout = new GroupLayout(getContentPane());
+		groupLayout.setHorizontalGroup(
+			groupLayout.createParallelGroup(Alignment.LEADING)
+				.addGroup(groupLayout.createSequentialGroup()
+					.addGap(118)
+					.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 765, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap(118, Short.MAX_VALUE))
+		);
+		groupLayout.setVerticalGroup(
+			groupLayout.createParallelGroup(Alignment.LEADING)
+				.addGroup(groupLayout.createSequentialGroup()
+					.addGap(77)
+					.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 381, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap(112, Short.MAX_VALUE))
+		);
+		
+		table = new JTable();
+		table.setModel(new DefaultTableModel(
+			new Object[][] {
+			},
+			new String[] {
+				"\u8D5B\u9879\u7F16\u53F7", "\u8D5B\u9879\u540D\u79F0", "\u8D1F\u8D23\u8001\u5E08", "\u6240\u5C5E\u5B66\u9662", "\u8D5B\u9879\u7B49\u7EA7"
+			}
+		) {
+			boolean[] columnEditables = new boolean[] {
+				false, false, false, false, false
+			};
+			public boolean isCellEditable(int row, int column) {
+				return columnEditables[column];
+			}
+		});
+		scrollPane.setViewportView(table);
+		getContentPane().setLayout(groupLayout);
+
+	}
+}

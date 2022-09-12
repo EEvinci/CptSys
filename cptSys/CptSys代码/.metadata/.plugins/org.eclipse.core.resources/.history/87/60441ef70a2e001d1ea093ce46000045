@@ -1,0 +1,139 @@
+package cn.zucc.edu.view;
+
+import java.awt.EventQueue;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.util.Vector;
+
+import javax.swing.JButton;
+import javax.swing.JInternalFrame;
+import javax.swing.JLabel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.table.DefaultTableModel;
+
+import cn.zucc.edu.dao.CptDao;
+import cn.zucc.edu.models.BeanCptInfo;
+import cn.zucc.edu.util.DBUtil;
+
+public class StuQueryCptInfoInterFrm extends JInternalFrame {
+	private JTextField textField;
+	private JTable table;
+
+	private DBUtil dbUtil = new DBUtil();
+	private CptDao cptDao = new CptDao();
+	
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					StuQueryCptInfoInterFrm frame = new StuQueryCptInfoInterFrm();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the frame.
+	 */
+	public StuQueryCptInfoInterFrm() {
+		setMaximizable(true);
+		setIconifiable(true);
+		setClosable(true);
+		setBounds(100, 100, 1004, 600);
+		getContentPane().setLayout(null);
+		
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBounds(42, 90, 921, 421);
+		getContentPane().add(scrollPane);
+		
+		table = new JTable();
+		table.setModel(new DefaultTableModel(
+			new Object[][] {
+			},
+			new String[] {
+				"\u7ADE\u8D5B\u7F16\u53F7", "\u6240\u5C5E\u8D5B\u9879\u7F16\u53F7", "\u7ADE\u8D5B\u540D\u79F0", "\u7ADE\u8D5B\u671F\u5C4A", "\u4E3E\u884C\u5E74\u4EFD", "\u4E3E\u884C\u65E5\u671F", "\u62A5\u540D\u5F00\u59CB\u65F6\u95F4", "\u62A5\u540D\u622A\u6B62\u65F6\u95F4", "\u8054\u7CFB\u8001\u5E08", "\u7ADE\u8D5B\u5B98\u7F51"
+			}
+		));
+		scrollPane.setViewportView(table);
+		
+		JLabel lblNewLabel = new JLabel("竞赛名称");
+		lblNewLabel.setFont(new Font("宋体", Font.BOLD, 23));
+		lblNewLabel.setBounds(252, 29, 111, 27);
+		getContentPane().add(lblNewLabel);
+		
+		textField = new JTextField();
+		textField.setColumns(10);
+		textField.setBounds(363, 24, 202, 34);
+		getContentPane().add(textField);
+		
+		JButton btnNewButton = new JButton("查询");
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				CptInfoSearchActionPerformed(e);
+			}
+		});
+		btnNewButton.setFont(new Font("宋体", Font.BOLD, 24));
+		btnNewButton.setBounds(589, 24, 97, 37);
+		getContentPane().add(btnNewButton);
+
+	}
+
+	
+	/**
+	 * 竞赛信息查询
+	 * @param e
+	 */
+	private void CptInfoSearchActionPerformed(ActionEvent e) {
+		String CptId = this.textField.getText();
+		BeanCptInfo cptInfo = new BeanCptInfo();
+		cptInfo.setCptId(CptId);
+		this.fillTable(cptInfo);
+	}
+
+	
+	/**
+	 * 竞赛信息显示填充表格
+	 * @param cptInfo
+	 */
+	private void fillTable(BeanCptInfo cptInfo) {
+		DefaultTableModel dtm = (DefaultTableModel) table.getModel();
+		dtm.setRowCount(0);
+		Connection conn = null;
+		try {
+			conn = dbUtil.getConn();
+			ResultSet rs = cptDao.query(conn,cptInfo);
+			while(rs.next())
+			{
+				Vector v = new Vector();
+				v.add(rs.getString("CptId"));
+				v.add(rs.getString("CptItemId"));
+				v.add(rs.getString("CptName"));
+				v.add(rs.getString("CptYear"));
+				v.add(rs.getString("HoldYear"));
+				v.add(rs.getString("HoldDay"));
+				v.add(rs.getString("RegiStart"));
+				v.add(rs.getString("RegiEnd"));
+				v.add(rs.getString("Contact"));
+				v.add(rs.getString("Web"));
+				
+
+				dtm.addRow(v);
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+	}
+	
+	
+}

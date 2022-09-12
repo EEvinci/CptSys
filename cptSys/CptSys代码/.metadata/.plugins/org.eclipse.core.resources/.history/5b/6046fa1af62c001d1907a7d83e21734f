@@ -1,0 +1,128 @@
+package cn.zucc.edu.view;
+
+import java.awt.EventQueue;
+
+import javax.swing.JInternalFrame;
+import javax.swing.GroupLayout;
+import javax.swing.GroupLayout.Alignment;
+import javax.swing.JScrollPane;
+import javax.swing.JLabel;
+import javax.swing.JTable;
+import java.awt.Font;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.util.Vector;
+
+import javax.swing.JTextField;
+import javax.swing.JButton;
+import javax.swing.LayoutStyle.ComponentPlacement;
+import javax.swing.table.DefaultTableModel;
+
+import cn.zucc.edu.dao.CptDao;
+import cn.zucc.edu.models.BeanCptInfo;
+import cn.zucc.edu.util.DBUtil;
+
+public class AdminQueryCptRegiInterFrm extends JInternalFrame {
+	private JTable table;
+	private JTextField textField;
+
+	private DBUtil dbUtil = new DBUtil();
+	private CptDao cptDao = new CptDao();
+	
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					AdminQueryCptRegiInterFrm frame = new AdminQueryCptRegiInterFrm();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the frame.
+	 */
+	public AdminQueryCptRegiInterFrm() {
+		setClosable(true);
+		setResizable(true);
+		setMaximizable(true);
+		setIconifiable(true);
+		setBounds(100, 100, 1000, 600);
+		
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBounds(32, 100, 921, 421);
+		
+		JLabel lblNewLabel = new JLabel("队伍编号");
+		lblNewLabel.setBounds(261, 33, 111, 27);
+		lblNewLabel.setFont(new Font("宋体", Font.BOLD, 23));
+		
+		textField = new JTextField();
+		textField.setBounds(376, 26, 202, 48);
+		textField.setColumns(10);
+		
+		JButton btnNewButton = new JButton("查询");
+		btnNewButton.setBounds(627, 28, 97, 37);
+		btnNewButton.setFont(new Font("宋体", Font.BOLD, 24));
+		getContentPane().setLayout(null);
+		
+		table = new JTable();
+		table.setModel(new DefaultTableModel(
+			new Object[][] {
+			},
+			new String[] {
+				"\u5B66\u53F7", "\u5B66\u751F\u59D3\u540D", "\u961F\u4F0D\u7F16\u53F7", "\u7ADE\u8D5B\u540D\u79F0", "\u8D5B\u9879\u540D\u79F0", "\u73ED\u7EA7", "\u5E74\u7EA7", "\u4E13\u4E1A", "\u62A5\u540D\u65F6\u95F4", "\u62A5\u540D\u72B6\u6001"
+			}
+		) {
+			boolean[] columnEditables = new boolean[] {
+				false, true, true, true, true, false, false, true, true, true
+			};
+			public boolean isCellEditable(int row, int column) {
+				return columnEditables[column];
+			}
+		});
+		scrollPane.setViewportView(table);
+		getContentPane().add(scrollPane);
+		getContentPane().add(lblNewLabel);
+		getContentPane().add(textField);
+		getContentPane().add(btnNewButton);
+
+	}
+	
+	/**
+	 * 竞赛信息显示填充表格
+	 * @param cptInfo
+	 */
+	private void fillTable(BeanCptInfo cptInfo) {
+		DefaultTableModel dtm = (DefaultTableModel) table.getModel();
+		dtm.setRowCount(0);
+		Connection conn = null;
+		try {
+			conn = dbUtil.getConn();
+			ResultSet rs = cptDao.queryCptRegi(conn,cptInfo);
+			while(rs.next())
+			{
+				Vector v = new Vector();
+				v.add(rs.getString("CptItemId"));
+				v.add(rs.getString("CptId"));
+				v.add(rs.getString("StuId"));
+				v.add(rs.getString("StuName"));
+				v.add(rs.getString("SClass"));
+				v.add(rs.getString("Grade"));
+				v.add(rs.getString("Profess"));
+				v.add(rs.getString("TeamId"));
+				v.add(rs.getString("RegiStart"));
+				v.add(rs.getString("RegiEnd"));
+				dtm.addRow(v);
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+	}
+	
+}

@@ -1,0 +1,18 @@
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+public class Test {
+
+	public static void main(String[] args) {
+		// TODO 自动生成的方法存根
+		String n1 = "2022-09-23";//开始
+		String n2 = "2022-09-25";//结束
+		String n3 = "2022-09-24";//报名
+		int cpm = n3.compareTo(n1);
+		int cpm_2 = n3.compareTo(n2);
+		
+		System.out.println(cpm);
+		System.out.println(cpm_2);
+		
+}
+}

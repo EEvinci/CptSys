@@ -1,0 +1,54 @@
+package cn.zucc.edu.models;
+
+
+//队伍信息表
+public class BeanTeam {
+	
+	private String TeamId;
+	private String TeamName;
+	private int MemNum;
+	
+	public BeanTeam() {
+		super();
+		// TODO 自动生成的构造函数存根
+	}
+	
+	
+	public BeanTeam(String teamId) {
+		super();
+		TeamId = teamId;
+	}
+
+
+	public BeanTeam(String teamId, String teamName, int memNum) {
+		super();
+		TeamId = teamId;
+		TeamName = teamName;
+		MemNum = memNum;
+	}
+	
+
+	/*
+	 *getter and setter 
+	 */
+	public String getTeamId() {
+		return TeamId;
+	}
+	public void setTeamId(String teamId) {
+		TeamId = teamId;
+	}
+	public String getTeamName() {
+		return TeamName;
+	}
+	public void setTeamName(String teamName) {
+		TeamName = teamName;
+	}
+	public int getMemNum() {
+		return MemNum;
+	}
+	public void setMemNum(int memNum) {
+		MemNum = memNum;
+	}
+	
+	
+}

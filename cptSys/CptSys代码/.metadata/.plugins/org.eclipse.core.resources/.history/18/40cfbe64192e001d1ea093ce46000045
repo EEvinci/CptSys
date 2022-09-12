@@ -1,0 +1,429 @@
+package cn.zucc.edu.view;
+
+import java.awt.Color;
+import java.awt.EventQueue;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.util.Vector;
+
+import javax.swing.GroupLayout;
+import javax.swing.GroupLayout.Alignment;
+import javax.swing.JButton;
+import javax.swing.JInternalFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.LayoutStyle.ComponentPlacement;
+import javax.swing.border.EtchedBorder;
+import javax.swing.border.TitledBorder;
+import javax.swing.table.DefaultTableModel;
+
+import cn.zucc.edu.dao.StuDao;
+import cn.zucc.edu.models.BeanStuInfo;
+import cn.zucc.edu.models.BeanTeamUp;
+import cn.zucc.edu.util.DBUtil;
+import cn.zucc.edu.util.StringUtil;
+
+public class AdminRUDStuInterFrm extends JInternalFrame {
+	private JTextField StuInfoTxt;
+	
+	private DBUtil dbUtil = new DBUtil();
+	private StuDao stuDao = new StuDao();
+	
+	private JTextField textField;
+	private JTextField textField_1;
+	private JTextField textField_2;
+	private JTextField textField_3;
+	private JTextField textField_4;
+	private JTextField textField_5;
+	private JTextField textField_6;
+	private JTextField isPtcptTxt;
+	private JTable table;
+
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					AdminRUDStuInterFrm frame = new AdminRUDStuInterFrm();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the frame.
+	 */
+	public AdminRUDStuInterFrm() {
+		setTitle("查询/修改/删除学生信息");
+		setClosable(true);
+		setMaximizable(true);
+		setIconifiable(true);
+		setBounds(100, 100, 1006, 600);
+		
+		JLabel lblNewLabel = new JLabel("学号");
+		lblNewLabel.setFont(new Font("宋体", Font.BOLD, 20));
+		
+		StuInfoTxt = new JTextField();
+		StuInfoTxt.setColumns(10);
+		
+		JButton Query = new JButton("查询");
+		Query.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				StuInfoSearchActionPerformed(e);
+			}
+		});
+		Query.setFont(new Font("宋体", Font.BOLD, 20));
+		
+		JPanel panel = new JPanel();
+		panel.setLayout(null);
+		panel.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)), "\u8D5B\u9879\u4FE1\u606F\u64CD\u4F5C", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(64, 64, 64)));
+		
+		JButton btnNewButton_1 = new JButton("修改");
+		btnNewButton_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				StuInfoUpdateActionPerformed(e);
+			}
+		});
+		btnNewButton_1.setFont(new Font("宋体", Font.BOLD, 20));
+		btnNewButton_1.setBounds(239, 127, 97, 33);
+		panel.add(btnNewButton_1);
+		
+		JButton btnNewButton_2 = new JButton("删除");
+		btnNewButton_2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				StuInfoDeleteActionPerformed(e);
+			}
+		});
+		btnNewButton_2.setFont(new Font("宋体", Font.BOLD, 20));
+		btnNewButton_2.setBounds(602, 127, 97, 33);
+		panel.add(btnNewButton_2);
+		
+		JLabel lblNewLabel_1_1 = new JLabel("学号");
+		lblNewLabel_1_1.setFont(new Font("宋体", Font.BOLD, 17));
+		lblNewLabel_1_1.setBounds(99, 28, 35, 20);
+		panel.add(lblNewLabel_1_1);
+		
+		textField = new JTextField();
+		textField.setEditable(false);
+		textField.setColumns(10);
+		textField.setBounds(146, 27, 81, 21);
+		panel.add(textField);
+		
+		JLabel lblNewLabel_1_2_4 = new JLabel("姓名");
+		lblNewLabel_1_2_4.setFont(new Font("宋体", Font.BOLD, 17));
+		lblNewLabel_1_2_4.setBounds(279, 31, 44, 20);
+		panel.add(lblNewLabel_1_2_4);
+		
+		textField_1 = new JTextField();
+		textField_1.setColumns(10);
+		textField_1.setBounds(317, 30, 81, 21);
+		panel.add(textField_1);
+		
+		JLabel lblNewLabel_1_1_1 = new JLabel("登陆密码");
+		lblNewLabel_1_1_1.setFont(new Font("宋体", Font.BOLD, 17));
+		lblNewLabel_1_1_1.setBounds(437, 29, 71, 20);
+		panel.add(lblNewLabel_1_1_1);
+		
+		textField_2 = new JTextField();
+		textField_2.setColumns(10);
+		textField_2.setBounds(516, 28, 81, 21);
+		panel.add(textField_2);
+		
+		JLabel lblNewLabel_1_1_2 = new JLabel("班级");
+		lblNewLabel_1_1_2.setFont(new Font("宋体", Font.BOLD, 17));
+		lblNewLabel_1_1_2.setBounds(670, 26, 44, 20);
+		panel.add(lblNewLabel_1_1_2);
+		
+		textField_3 = new JTextField();
+		textField_3.setColumns(10);
+		textField_3.setBounds(724, 25, 90, 21);
+		panel.add(textField_3);
+		
+		JLabel lblNewLabel_1_1_3 = new JLabel("年级");
+		lblNewLabel_1_1_3.setFont(new Font("宋体", Font.BOLD, 17));
+		lblNewLabel_1_1_3.setBounds(84, 85, 44, 20);
+		panel.add(lblNewLabel_1_1_3);
+		
+		textField_4 = new JTextField();
+		textField_4.setColumns(10);
+		textField_4.setBounds(136, 84, 87, 21);
+		panel.add(textField_4);
+		
+		JScrollPane scrollPane = new JScrollPane();
+		GroupLayout groupLayout = new GroupLayout(getContentPane());
+		groupLayout.setHorizontalGroup(
+			groupLayout.createParallelGroup(Alignment.LEADING)
+				.addGroup(groupLayout.createSequentialGroup()
+					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+						.addGroup(groupLayout.createSequentialGroup()
+							.addGap(285)
+							.addComponent(lblNewLabel)
+							.addPreferredGap(ComponentPlacement.UNRELATED)
+							.addComponent(StuInfoTxt, GroupLayout.PREFERRED_SIZE, 197, GroupLayout.PREFERRED_SIZE)
+							.addGap(41)
+							.addComponent(Query, GroupLayout.PREFERRED_SIZE, 97, GroupLayout.PREFERRED_SIZE))
+						.addGroup(groupLayout.createSequentialGroup()
+							.addGap(29)
+							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+								.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 929, GroupLayout.PREFERRED_SIZE)
+								.addComponent(panel, GroupLayout.PREFERRED_SIZE, 937, GroupLayout.PREFERRED_SIZE))))
+					.addContainerGap(24, Short.MAX_VALUE))
+		);
+		groupLayout.setVerticalGroup(
+			groupLayout.createParallelGroup(Alignment.LEADING)
+				.addGroup(groupLayout.createSequentialGroup()
+					.addGap(35)
+					.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
+						.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+							.addGroup(groupLayout.createSequentialGroup()
+								.addGap(4)
+								.addComponent(StuInfoTxt, GroupLayout.PREFERRED_SIZE, 29, GroupLayout.PREFERRED_SIZE))
+							.addComponent(Query, GroupLayout.PREFERRED_SIZE, 33, GroupLayout.PREFERRED_SIZE))
+						.addComponent(lblNewLabel, GroupLayout.PREFERRED_SIZE, 24, GroupLayout.PREFERRED_SIZE))
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 223, GroupLayout.PREFERRED_SIZE)
+					.addGap(33)
+					.addComponent(panel, GroupLayout.PREFERRED_SIZE, 192, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap(44, Short.MAX_VALUE))
+		);
+		
+		table = new JTable();
+		table.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				stuInfoTableMousePressed(e);
+			}
+		});
+		table.setModel(new DefaultTableModel(
+			new Object[][] {
+			},
+			new String[] {
+				"\u5B66\u53F7", "\u5B66\u751F\u59D3\u540D", "\u767B\u9646\u5BC6\u7801", "\u4E13\u4E1A", "\u5E74\u7EA7", "\u73ED\u7EA7", "\u624B\u673A\u53F7\u7801", "\u662F\u5426\u4E3A\u53C2\u8D5B\u961F\u5458"
+			}
+		));
+		scrollPane.setViewportView(table);
+		
+		JLabel lblNewLabel_1_1_2_1 = new JLabel("专业");
+		lblNewLabel_1_1_2_1.setFont(new Font("宋体", Font.BOLD, 17));
+		lblNewLabel_1_1_2_1.setBounds(279, 86, 35, 20);
+		panel.add(lblNewLabel_1_1_2_1);
+		
+		textField_5 = new JTextField();
+		textField_5.setColumns(10);
+		textField_5.setBounds(322, 85, 81, 21);
+		panel.add(textField_5);
+		
+		JLabel lblNewLabel_1_1_3_1 = new JLabel("手机号码");
+		lblNewLabel_1_1_3_1.setFont(new Font("宋体", Font.BOLD, 17));
+		lblNewLabel_1_1_3_1.setBounds(437, 86, 71, 20);
+		panel.add(lblNewLabel_1_1_3_1);
+		
+		textField_6 = new JTextField();
+		textField_6.setColumns(10);
+		textField_6.setBounds(516, 85, 81, 21);
+		panel.add(textField_6);
+		
+		JLabel lblNewLabel_1_1_3_1_1 = new JLabel("是否为参赛队员");
+		lblNewLabel_1_1_3_1_1.setFont(new Font("宋体", Font.BOLD, 17));
+		lblNewLabel_1_1_3_1_1.setBounds(640, 84, 137, 20);
+		panel.add(lblNewLabel_1_1_3_1_1);
+		
+		isPtcptTxt = new JTextField();
+		isPtcptTxt.setColumns(10);
+		isPtcptTxt.setBounds(775, 83, 81, 21);
+		panel.add(isPtcptTxt);
+		getContentPane().setLayout(groupLayout);
+
+		this.fillTable(new BeanStuInfo());//将表中的信息传入到表格中
+	}
+	
+	
+	/**
+	 * 学生信息删除
+	 * @param evt
+	 */
+	private void StuInfoDeleteActionPerformed(ActionEvent evt) {
+		String id = textField.getText();
+		if(StringUtil.isEmpty(id)) {
+			JOptionPane.showMessageDialog(null, "请选择要删除的记录");
+			return;
+		}
+		int n = JOptionPane.showConfirmDialog(null, "确认要删除此记录吗？");
+		if(n == 0) {
+			Connection conn = null;
+			try {
+				conn = dbUtil.getConn();
+				int delete = stuDao.delete(conn, id);
+				if(delete == 1) {
+					JOptionPane.showMessageDialog(null, "删除成功");
+					this.reSetValue();
+					this.fillTable(new BeanStuInfo());
+				}else {
+					JOptionPane.showMessageDialog(null, "删除失败");
+				}
+			}catch(Exception e) {
+				e.printStackTrace();
+				JOptionPane.showMessageDialog(null, "删除失败");
+			}
+		}
+	}
+	
+	
+	
+	
+	/**
+	 * 学生信息修改
+	 * @param e
+	 */
+	private void StuInfoUpdateActionPerformed(ActionEvent evt) {
+		// TODO 自动生成的方法存根
+		String StuId = textField.getText();
+		String Name = textField_1.getText();
+		String StuPsw = textField_2.getText();
+		String SClass = textField_3.getText();
+		String Grade = textField_4.getText();
+		String Profess = textField_5.getText();
+		String PhoneNum = textField_6.getText();
+		String IsPtctp = isPtcptTxt.getText();
+		
+		if(StringUtil.isEmpty(StuId)) {
+			JOptionPane.showMessageDialog(null, "请选择要修改的记录");
+			return;
+		}
+		if(StringUtil.isEmpty(StuId) || StringUtil.isEmpty(Name) || StringUtil.isEmpty(StuPsw) 
+				|| StringUtil.isEmpty(SClass) || StringUtil.isEmpty(Grade) || StringUtil.isEmpty(Profess) 
+				|| StringUtil.isEmpty(PhoneNum) || StringUtil.isEmpty(IsPtctp)){
+			JOptionPane.showMessageDialog(null, "请将要修改的信息填写完整");
+			return;
+		}
+		
+		BeanStuInfo stuInfo = new BeanStuInfo(StuId,Name,StuPsw,SClass,Grade,Profess,PhoneNum);
+		BeanTeamUp teamUp = new BeanTeamUp(IsPtctp);
+		Connection conn = null;
+		
+		try {
+			conn = dbUtil.getConn();
+			int rs = stuDao.update(conn, stuInfo, teamUp);
+			if(rs == 1) {
+				JOptionPane.showMessageDialog(null, "修改成功");
+				
+				this.reSetValue();//清除留在表格中的数据
+				
+				this.fillTable(new BeanStuInfo());//在上面的table中显示已经更新过的信息
+			}else {
+				JOptionPane.showMessageDialog(null, "修改失败");
+			}
+		} catch (Exception e) {
+			// TODO 自动生成的 catch 块
+			e.printStackTrace();
+		}	
+	}
+	
+	
+	/**
+	 * 表格行点击事件处理
+	 * @param e
+	 * 	private JTextField textField;
+	private JTextField textField_1;
+	private JTextField textField_2;
+	private JTextField textField_3;
+	private JTextField textField_4;
+	private JTextField textField_5;
+	private JTextField textField_6;
+	private JTextField isPtcptTxt;
+	 */
+	private void stuInfoTableMousePressed(MouseEvent e) {
+		int row = table.getSelectedRow();
+		
+		this.textField.setText((String)table.getValueAt(row, 0));
+		this.textField_1.setText((String) table.getValueAt(row,1));
+		this.textField_2.setText((String)table.getValueAt(row, 2));
+		this.textField_3.setText((String)table.getValueAt(row,3));
+		this.textField_4.setText((String)table.getValueAt(row, 4));
+		this.textField_5.setText((String)table.getValueAt(row, 5));
+		this.textField_6.setText((String)table.getValueAt(row, 6));
+		this.isPtcptTxt.setText((String)table.getValueAt(row, 7));
+		
+	}
+	
+	
+	/**
+	 *重置表单 
+	 */
+	private void reSetValue() {
+		this.textField.setText("");
+		this.textField_1.setText("");
+		this.textField_2.setText("");
+		this.textField_3.setText("");
+		this.textField_4.setText("");
+		this.textField_5.setText("");
+		this.textField_6.setText("");
+		this.isPtcptTxt.setText("");
+	}
+
+	/**
+	 * 学生信息查询
+	 * @param e
+	 */
+	private void StuInfoSearchActionPerformed(ActionEvent e) {
+		String c_stuInfo = this.StuInfoTxt.getText();
+		BeanStuInfo stuInfo = new BeanStuInfo();
+		stuInfo.setStuId(c_stuInfo);
+		this.fillTable(stuInfo);
+	}
+	
+	/**
+	 * 填充表格信息
+	 * @param stuInfo
+	 */
+	private void fillTable(BeanStuInfo stuInfo) {
+		DefaultTableModel dtm = (DefaultTableModel) table.getModel();
+		dtm.setRowCount(0);
+		Connection conn = null;
+		try {
+			conn = dbUtil.getConn();
+			ResultSet rs = stuDao.query(conn,stuInfo);
+			while(rs.next())
+			{
+				Vector v = new Vector();
+				
+				v.add(rs.getString("StuId"));
+				v.add(rs.getString("Name"));
+				v.add(rs.getString("StuPsw"));
+				v.add(rs.getString("SClass"));
+				v.add(rs.getString("Grade"));
+				v.add(rs.getString("Profess"));
+				v.add(rs.getString("PhoneNum"));
+				v.add(rs.getString("IsPtcpt"));
+
+				dtm.addRow(v);
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}finally {
+			try {
+				dbUtil.closeConn(conn);
+			}catch(Exception e)
+			{
+				e.printStackTrace();
+			}
+		}
+	}
+	
+}
+
+

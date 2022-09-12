@@ -1,0 +1,6 @@
+package cn.edu.zucc.util;
+
+public class DBUtil {
+
+	
+}

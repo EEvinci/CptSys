@@ -1,0 +1,286 @@
+package cn.zucc.edu.dao;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import cn.zucc.edu.models.BeanCptInfo;
+import cn.zucc.edu.models.BeanCptItemInfo;
+import cn.zucc.edu.models.BeanStuInfo;
+import cn.zucc.edu.util.BaseException;
+import cn.zucc.edu.util.DbException;
+import cn.zucc.edu.util.StringUtil;
+
+/**
+ * 学生信息管理
+ * @author PC
+ *
+ */
+public class StuDao {
+
+	/**
+	 * 学生信息添加
+	 * @param conn
+	 * @param stuInfo
+	 * @return
+	 * @throws Exception
+	 */
+	public int add(Connection conn, BeanStuInfo stuInfo) throws BaseException{
+		
+		int rs = 0;
+		String sql = "insert into stu_info values(?,?,?,?,?,?,?)";
+		
+		try {
+			PreparedStatement pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setString(1, stuInfo.getStuId());
+			pstmt.setString(2, stuInfo.getName());
+			pstmt.setString(3, stuInfo.getStuPsw());
+			pstmt.setString(4, stuInfo.getSClass());
+			pstmt.setString(5, stuInfo.getGrade());
+			pstmt.setString(6, stuInfo.getProfess());
+			pstmt.setString(7, stuInfo.getPhoneNum());
+			
+			rs = pstmt.executeUpdate();
+			return rs;
+		}catch(SQLException e) {
+			e.printStackTrace();
+			throw new DbException(e);
+		}finally {
+			try {
+				conn.close();
+			}catch(SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	
+	/**
+	 * 查询学生信息
+	 * @param conn
+	 * @param stuInfo
+	 * @return
+	 * @throws BaseException
+	 */
+	public ResultSet query(Connection conn,BeanStuInfo stuInfo)throws BaseException{
+
+		ResultSet rs = null;
+		StringBuffer sb = new StringBuffer("select * from stu_info");
+		
+		try {
+			if(StringUtil.isNotEmpty(stuInfo.getStuId())){
+				sb.append(" and StuId = " + stuInfo.getStuId());
+			}
+			PreparedStatement pstmt = conn.prepareStatement(sb.toString().replaceFirst("and", "where"));
+			rs = pstmt.executeQuery();
+			
+			return rs;
+		}catch(SQLException e){
+			e.printStackTrace();
+			throw new DbException(e);
+		}
+	}
+	
+	
+	
+	
+	/**
+	 * 修改密码功能
+	 * @param stuInfo
+	 * @return
+	 * @throws BaseException
+	 */
+	public int changePwd(Connection conn,BeanStuInfo stuInfo) throws BaseException{
+		
+		int n = 0;
+		String sql = "update stu_info set StuPsw=? where StuId=?";
+		
+		try {
+			PreparedStatement pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setString(1, stuInfo.getStuPsw());
+			pstmt.setString(2, stuInfo.getStuId());
+			n = pstmt.executeUpdate();//executeUpdate执行成功返回1，失败返回0
+			
+			return n;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+            if (conn != null)
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+        }
+		return 0;//如果上面的n没有返回1，那么下面就返回0，即代表失败
+	}
+	
+
+	/**
+	 * 修改学生信息
+	 * @param conn
+	 * @param cptInfo
+	 * @return
+	 * @throws BaseException
+	 */
+	public int update(Connection conn, BeanStuInfo stuInfo) throws BaseException{
+		int rs = 0;
+		String sql = "update stu_info set Name=?, StuPsw=?, SClass=?, Grade=?, Profess=?, PhoneNum=? where StuId=?";
+		
+		try {
+			PreparedStatement pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setString(1, stuInfo.getName());
+			pstmt.setString(2, stuInfo.getStuPsw());
+			pstmt.setString(3, stuInfo.getSClass());
+			pstmt.setString(4, stuInfo.getGrade());
+			pstmt.setString(5, stuInfo.getProfess());
+			pstmt.setString(6, stuInfo.getPhoneNum());
+			pstmt.setString(7, stuInfo.getStuId());
+			
+			rs = pstmt.executeUpdate();
+			return rs;
+		}catch(SQLException e) {
+			e.printStackTrace();
+			throw new DbException(e);
+		}finally {
+			try {
+				conn.close();
+			}catch(SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	
+	/**
+	 * 删除学生信息
+	 * @param conn
+	 * @param stuInfo
+	 * @return
+	 * @throws BaseException
+	 */
+	public int delete(Connection conn, String id) throws BaseException{
+		
+		int rs = 0;
+		String sql = "delete from stu_info where StuId = ?";
+		
+		try {
+			PreparedStatement pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setString(1,id);
+			rs = pstmt.executeUpdate();
+			
+			return rs;
+		}catch(SQLException e) {
+			e.printStackTrace();
+			throw new DbException(e);
+		}finally {
+			try {
+				conn.close();
+			}catch(SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	
+	/**
+	 * 查询学生获奖情况
+	 * @param conn
+	 * @param stuInfo
+	 * @return
+	 * @throws BaseException
+	 */
+	public ResultSet queryStuRwd(Connection conn, BeanStuInfo stuInfo) throws BaseException{
+		
+		ResultSet rs = null;
+		StringBuffer sb = new StringBuffer("select stu_info.StuId,stu_info.Name,cpt_info.CptName,team.RwdGrade,stu_info.Profess,stu_info.Grade,stu_info.SClass"
+				+ " from stu_info, team, team_up, cpt_info, register");
+		
+		try {
+			if(StringUtil.isEmpty(stuInfo.getStuId()) && StringUtil.isEmpty(stuInfo.getName()) && StringUtil.isEmpty(stuInfo.getProfess()) && StringUtil.isEmpty(stuInfo.getGrade())){
+				sb.append(" and stu_info.StuId=team_up.StuId and team.TeamId=team_up.TeamId and team_up.TeamId = register.TeamId "
+						+ "and cpt_info.CptId = register.CptId and team.IsFinCpt = '是'");
+			}
+			else if(StringUtil.isNotEmpty(stuInfo.getStuId()) && StringUtil.isEmpty(stuInfo.getName()) && StringUtil.isEmpty(stuInfo.getProfess()) && StringUtil.isEmpty(stuInfo.getGrade())){
+				sb.append(" and stu_info.StuId=team_up.StuId and team.TeamId=team_up.TeamId and team_up.TeamId = register.TeamId "
+						+ "and cpt_info.CptId = register.CptId and team.IsFinCpt = '是' and stu_info.StuId="+ stuInfo.getStuId());
+			}
+			else if(StringUtil.isEmpty(stuInfo.getStuId()) && StringUtil.isNotEmpty(stuInfo.getName()) && StringUtil.isEmpty(stuInfo.getProfess()) && StringUtil.isEmpty(stuInfo.getGrade())){
+				sb.append(" and stu_info.StuId=team_up.StuId and team.TeamId=team_up.TeamId and team_up.TeamId = register.TeamId "
+						+ "and cpt_info.CptId = register.CptId and team.IsFinCpt = '是' and stu_info.Name like '%" + stuInfo.getName()+"%'");
+			}
+			else if(StringUtil.isEmpty(stuInfo.getStuId()) && StringUtil.isEmpty(stuInfo.getName()) && StringUtil.isNotEmpty(stuInfo.getProfess()) && StringUtil.isEmpty(stuInfo.getGrade())){
+				sb.append(" and stu_info.StuId=team_up.StuId and team.TeamId=team_up.TeamId and team_up.TeamId = register.TeamId "
+						+ "and cpt_info.CptId = register.CptId and team.IsFinCpt = '是' and stu_info.Profess="+ stuInfo.getProfess() );
+			}
+			else if(StringUtil.isEmpty(stuInfo.getStuId()) && StringUtil.isEmpty(stuInfo.getName()) && StringUtil.isEmpty(stuInfo.getProfess()) && StringUtil.isNotEmpty(stuInfo.getGrade())){
+				sb.append(" and stu_info.StuId=team_up.StuId and team.TeamId=team_up.TeamId and team_up.TeamId = register.TeamId "
+						+ "and cpt_info.CptId = register.CptId and team.IsFinCpt = '是' and stu_info.Grade=" + stuInfo.getGrade() );
+			}
+			else if(StringUtil.isNotEmpty(stuInfo.getStuId()) && StringUtil.isNotEmpty(stuInfo.getName()) && StringUtil.isEmpty(stuInfo.getProfess()) && StringUtil.isEmpty(stuInfo.getGrade())){
+				sb.append(" and stu_info.StuId=team_up.StuId and team.TeamId=team_up.TeamId and team_up.TeamId = register.TeamId "
+						+ "and cpt_info.CptId = register.CptId and team.IsFinCpt = '是' and stu_info.StuId="+ stuInfo.getStuId()
+						+ "and stu_info.Name like '%" + stuInfo.getName()+"%' ");
+			}
+			else if(StringUtil.isNotEmpty(stuInfo.getStuId()) && StringUtil.isEmpty(stuInfo.getName()) && StringUtil.isNotEmpty(stuInfo.getProfess()) && StringUtil.isEmpty(stuInfo.getGrade())){
+				sb.append(" and stu_info.StuId=team_up.StuId and team.TeamId=team_up.TeamId and team_up.TeamId = register.TeamId "
+						+ "and cpt_info.CptId = register.CptId and team.IsFinCpt = '是' and stu_info.StuId="+ stuInfo.getStuId() + " and stu_info.Profess="+ stuInfo.getProfess());
+			}
+			else if(StringUtil.isNotEmpty(stuInfo.getStuId()) && StringUtil.isEmpty(stuInfo.getName()) && StringUtil.isEmpty(stuInfo.getProfess()) && StringUtil.isNotEmpty(stuInfo.getGrade())){
+				sb.append(" and stu_info.StuId=team_up.StuId and team.TeamId=team_up.TeamId and team_up.TeamId = register.TeamId "
+						+ "and cpt_info.CptId = register.CptId and team.IsFinCpt = '是' and stu_info.StuId=" + stuInfo.getStuId() + " and stu_info.Grade=" + stuInfo.getGrade() );
+			}
+			else if(StringUtil.isEmpty(stuInfo.getStuId()) && StringUtil.isNotEmpty(stuInfo.getName()) && StringUtil.isNotEmpty(stuInfo.getProfess()) && StringUtil.isEmpty(stuInfo.getGrade())){
+				sb.append(" and stu_info.StuId=team_up.StuId and team.TeamId=team_up.TeamId and team_up.TeamId = register.TeamId "
+						+ "and cpt_info.CptId = register.CptId and team.IsFinCpt = '是' and stu_info.Name like '%" + stuInfo.getName()+"%' and stu_info.Profess="+ stuInfo.getProfess());
+			}
+			else if(StringUtil.isEmpty(stuInfo.getStuId()) && StringUtil.isNotEmpty(stuInfo.getName()) && StringUtil.isEmpty(stuInfo.getProfess()) && StringUtil.isNotEmpty(stuInfo.getGrade())){
+				sb.append(" and stu_info.StuId=team_up.StuId and team.TeamId=team_up.TeamId and team_up.TeamId = register.TeamId "
+						+ "and cpt_info.CptId = register.CptId and team.IsFinCpt = '是' and stu_info.Name like '%" + stuInfo.getName()+"%' and stu_info.Grade=" + stuInfo.getGrade() );
+			}
+			else if(StringUtil.isEmpty(stuInfo.getStuId()) && StringUtil.isEmpty(stuInfo.getName()) && StringUtil.isNotEmpty(stuInfo.getProfess()) && StringUtil.isNotEmpty(stuInfo.getGrade())){
+				sb.append(" and stu_info.StuId=team_up.StuId and team.TeamId=team_up.TeamId and team_up.TeamId = register.TeamId "
+						+ "and cpt_info.CptId = register.CptId and team.IsFinCpt = '是' and stu_info.Profess="+ stuInfo.getProfess() +" and stu_info.Grade=" + stuInfo.getGrade() );
+			}
+			else if(StringUtil.isNotEmpty(stuInfo.getStuId()) && StringUtil.isNotEmpty(stuInfo.getName()) && StringUtil.isNotEmpty(stuInfo.getProfess()) && StringUtil.isEmpty(stuInfo.getGrade())){
+				sb.append(" and stu_info.StuId=team_up.StuId and team.TeamId=team_up.TeamId and team_up.TeamId = register.TeamId "
+						+ "and cpt_info.CptId = register.CptId and team.IsFinCpt = '是' and stu_info.StuId="+ stuInfo.getStuId()
+						+ " and stu_info.Name like '%" + stuInfo.getName()+"%' and stu_info.Profess="+ stuInfo.getProfess());
+			}
+			else if(StringUtil.isNotEmpty(stuInfo.getStuId()) && StringUtil.isNotEmpty(stuInfo.getName()) && StringUtil.isEmpty(stuInfo.getProfess()) && StringUtil.isNotEmpty(stuInfo.getGrade())){
+				sb.append(" and stu_info.StuId=team_up.StuId and team.TeamId=team_up.TeamId and team_up.TeamId = register.TeamId "
+						+ "and cpt_info.CptId = register.CptId and team.IsFinCpt = '是' and stu_info.StuId="+ stuInfo.getStuId()
+						+ " and stu_info.Name like '%" + stuInfo.getName()+"%' and stu_info.Grade=" + stuInfo.getGrade() );
+			}
+			else if(StringUtil.isNotEmpty(stuInfo.getStuId()) && StringUtil.isEmpty(stuInfo.getName()) && StringUtil.isNotEmpty(stuInfo.getProfess()) && StringUtil.isNotEmpty(stuInfo.getGrade())){
+				sb.append(" and stu_info.StuId=team_up.StuId and team.TeamId=team_up.TeamId and team_up.TeamId = register.TeamId "
+						+ "and cpt_info.CptId = register.CptId and team.IsFinCpt = '是' and stu_info.StuId="+ stuInfo.getStuId()
+						+ " and stu_info.Profess="+ stuInfo.getProfess() +" and stu_info.Grade=" + stuInfo.getGrade() );
+			}
+			else if(StringUtil.isEmpty(stuInfo.getStuId()) && StringUtil.isNotEmpty(stuInfo.getName()) && StringUtil.isNotEmpty(stuInfo.getProfess()) && StringUtil.isNotEmpty(stuInfo.getGrade())){
+				sb.append(" and stu_info.StuId=team_up.StuId and team.TeamId=team_up.TeamId and team_up.TeamId = register.TeamId "
+						+ "and cpt_info.CptId = register.CptId and team.IsFinCpt = '是' and stu_info.Name like '%" + stuInfo.getName()+"%' and stu_info.Profess="
+						+ stuInfo.getProfess() +" and stu_info.Grade=" + stuInfo.getGrade() );
+			}
+			else if(StringUtil.isNotEmpty(stuInfo.getStuId()) && StringUtil.isNotEmpty(stuInfo.getName()) && StringUtil.isNotEmpty(stuInfo.getProfess()) && StringUtil.isNotEmpty(stuInfo.getGrade())){
+				sb.append(" and stu_info.StuId=team_up.StuId and team.TeamId=team_up.TeamId and team_up.TeamId = register.TeamId "
+						+ "and cpt_info.CptId = register.CptId and team.IsFinCpt = '是' and stu_info.StuId="+ stuInfo.getStuId()
+						+ " and stu_info.Name like '%" + stuInfo.getName()+"%' and stu_info.Profess="+ stuInfo.getProfess() +" and stu_info.Grade=" + stuInfo.getGrade() );
+			}
+
+			
+			PreparedStatement pstmt = conn.prepareStatement(sb.toString().replaceFirst("and", "where"));
+			rs = pstmt.executeQuery();
+			
+			return rs;
+		}catch(SQLException e){
+			e.printStackTrace();
+			throw new DbException(e);
+		}
+	}
+}

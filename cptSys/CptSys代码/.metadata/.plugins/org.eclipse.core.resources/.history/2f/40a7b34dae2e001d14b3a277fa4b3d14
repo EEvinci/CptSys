@@ -1,0 +1,188 @@
+package cn.zucc.edu.view;
+
+import java.awt.EventQueue;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.text.SimpleDateFormat;
+
+import javax.swing.JButton;
+import javax.swing.JInternalFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JTextField;
+
+import cn.zucc.edu.dao.RegiDao;
+import cn.zucc.edu.dao.TeamDao;
+import cn.zucc.edu.models.BeanCptInfo;
+import cn.zucc.edu.models.BeanRegister;
+import cn.zucc.edu.util.DBUtil;
+import cn.zucc.edu.util.StringUtil;
+
+public class StuCptRegiInterFrm extends JInternalFrame {
+	private JTextField teamIdtxt;
+	private JTextField CptIdTxt;
+	private JTextField RegiStatusTxt;
+
+	DBUtil dbUtil = new DBUtil();
+	RegiDao regiDao = new RegiDao();
+	private JTextField StuIdTxt;
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					StuCptRegiInterFrm frame = new StuCptRegiInterFrm();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the frame.
+	 */
+	public StuCptRegiInterFrm() {
+		setClosable(true);
+		setMaximizable(true);
+		setIconifiable(true);
+		getContentPane().setFont(new Font("宋体", Font.BOLD, 20));
+		setTitle("填写报名信息");
+		setBounds(100, 100, 595, 413);
+		getContentPane().setLayout(null);
+		
+		JLabel lblNewLabel = new JLabel("队伍编号");
+		lblNewLabel.setFont(new Font("宋体", Font.BOLD, 20));
+		lblNewLabel.setBounds(137, 96, 83, 24);
+		getContentPane().add(lblNewLabel);
+		
+		JLabel lblNewLabel_1 = new JLabel("竞赛编号");
+		lblNewLabel_1.setFont(new Font("宋体", Font.BOLD, 20));
+		lblNewLabel_1.setBounds(136, 141, 84, 27);
+		getContentPane().add(lblNewLabel_1);
+		
+		JLabel lblNewLabel_1_2 = new JLabel("报名状态");
+		lblNewLabel_1_2.setFont(new Font("宋体", Font.BOLD, 20));
+		lblNewLabel_1_2.setBounds(137, 185, 84, 27);
+		getContentPane().add(lblNewLabel_1_2);
+		
+		teamIdtxt = new JTextField();
+		teamIdtxt.setBounds(249, 100, 167, 21);
+		getContentPane().add(teamIdtxt);
+		teamIdtxt.setColumns(10);
+		
+		CptIdTxt = new JTextField();
+		CptIdTxt.setColumns(10);
+		CptIdTxt.setBounds(249, 141, 167, 21);
+		getContentPane().add(CptIdTxt);
+		
+		RegiStatusTxt = new JTextField();
+		RegiStatusTxt.setColumns(10);
+		RegiStatusTxt.setBounds(249, 190, 167, 21);
+		getContentPane().add(RegiStatusTxt);
+		
+		JButton confirm = new JButton("确认报名");
+		confirm.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				StuRegiActionPerformed(e);
+			}
+		});
+		confirm.setFont(new Font("宋体", Font.BOLD, 20));
+		confirm.setBounds(114, 278, 125, 33);
+		getContentPane().add(confirm);
+		
+		JButton reset = new JButton("重置");
+		reset.setFont(new Font("宋体", Font.BOLD, 20));
+		reset.setBounds(313, 278, 125, 33);
+		getContentPane().add(reset);
+		
+		JLabel lblNewLabel_2 = new JLabel("学号");
+		lblNewLabel_2.setFont(new Font("宋体", Font.BOLD, 20));
+		lblNewLabel_2.setBounds(150, 62, 46, 24);
+		getContentPane().add(lblNewLabel_2);
+		
+		StuIdTxt = new JTextField();
+		StuIdTxt.setColumns(10);
+		StuIdTxt.setBounds(249, 65, 167, 21);
+		getContentPane().add(StuIdTxt);
+
+	}
+
+	private void StuRegiActionPerformed(ActionEvent evt) {
+		String cptId = this.CptIdTxt.getText();
+		String teamId = this.teamIdtxt.getText();
+		String RegiStatus = this.RegiStatusTxt.getText();
+		String stuId = this.StuIdTxt.getText();
+		
+		SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd");
+		String regitime = sdf1.format(System.currentTimeMillis());
+		
+		if(StringUtil.isEmpty(cptId) || StringUtil.isEmpty(teamId) || StringUtil.isEmpty(RegiStatus) || StringUtil.isEmpty(stuId)){
+			JOptionPane.showMessageDialog(null, "请将报名信息填写完整");
+			return;
+		}
+		
+		BeanRegister regi = new BeanRegister(teamId,cptId,regitime,RegiStatus,stuId);
+		BeanCptInfo cpt = new BeanCptInfo(cptId);
+		
+		Connection conn = null;
+		ResultSet rs = null;
+		try{
+			
+			int flag = 0;
+
+			conn = dbUtil.getConn();
+			
+//			//报名时间判断
+//			String regiS = cpt.getRegiStart();
+//			String regiE = cpt.getRegiEnd();
+//			
+//			int cmp = regitime.compareTo(regiS);
+//			int cmp_2 = regitime.compareTo(regiE);
+//			
+//			if(cmp > 0 && cmp < cmp_2) {
+			rs = regiDao.regiTimeQuery(conn, cpt);
+			String regiS = rs.getString(1);
+			String regiE = rs.getString(2);
+			int cpm = regitime.compareTo(regiS);
+			int cpm_2 = regitime.compareTo(regiE);
+			if(cpm > 0 && cpm_2 < 0) {
+				flag = 1;
+			}
+			if(flag == 1) {
+				int n = regiDao.add(conn,regi);
+				if(n == 1) {
+					JOptionPane.showMessageDialog(null, "报名信息添加成功");
+				}
+				else {
+					JOptionPane.showMessageDialog(null, "学生只能作为一个队伍的队员参加一项竞赛!");
+				}
+			}
+			
+				
+//			}else {
+//				JOptionPane.showMessageDialog(null, "未在报名时间");
+//			}
+			
+		}catch(Exception e) {
+			e.printStackTrace();
+			JOptionPane.showMessageDialog(null, "报名信息重复");
+			}finally {
+				try {
+					dbUtil.closeConn(conn);
+				}
+				catch(Exception e) {
+					e.printStackTrace();
+				}
+			}
+	}
+	
+	
+	
+}

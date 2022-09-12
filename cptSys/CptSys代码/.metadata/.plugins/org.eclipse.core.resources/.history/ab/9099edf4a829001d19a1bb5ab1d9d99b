@@ -1,0 +1,259 @@
+package cn.zucc.edu.view;
+
+import java.awt.EventQueue;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.Connection;
+
+import javax.swing.GroupLayout;
+import javax.swing.GroupLayout.Alignment;
+import javax.swing.JButton;
+import javax.swing.JInternalFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JTextField;
+import javax.swing.LayoutStyle.ComponentPlacement;
+
+import cn.zucc.edu.dao.StuDao;
+import cn.zucc.edu.models.BeanStuInfo;
+import cn.zucc.edu.util.DBUtil;
+import cn.zucc.edu.util.StringUtil;
+
+public class AdminStuAddInterFrm extends JInternalFrame {
+	private JTextField StuIdTxt;
+	private JTextField StuNameTxt;
+	private JTextField StupwdTxt;
+	private JTextField StuClassTxt;
+	private JTextField StuGradeTxt;
+	private JTextField StuProTxt;
+	private JTextField StuPhoNumTxt;
+
+	
+	private DBUtil dbUtil = new DBUtil();
+	private StuDao stuDao = new StuDao(); 
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					AdminAddStuInterFrm frame = new AdminAddStuInterFrm();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the frame.
+	 */
+	public AdminStuAddInterFrm() {
+		setMaximizable(true);
+		setClosable(true);
+		setIconifiable(true);
+		setTitle("学生信息添加");
+		setBounds(100, 100, 450, 300);
+		
+		JLabel lblNewLabel = new JLabel("学   号");
+		
+		JLabel lblNewLabel_1 = new JLabel("姓   名");
+		
+		JLabel lblNewLabel_1_1 = new JLabel("登录密码");
+		
+		JLabel lblNewLabel_2 = new JLabel("班   级");
+		
+		JLabel lblNewLabel_2_1 = new JLabel("年   级");
+		
+		JLabel lblNewLabel_2_1_1 = new JLabel("专   业");
+		
+		JLabel lblNewLabel_2_1_1_1 = new JLabel("手 机 号");
+		
+		StuIdTxt = new JTextField();
+		StuIdTxt.setColumns(10);
+		
+		StuNameTxt = new JTextField();
+		StuNameTxt.setColumns(10);
+		
+		StupwdTxt = new JTextField();
+		StupwdTxt.setColumns(10);
+		
+		StuClassTxt = new JTextField();
+		StuClassTxt.setColumns(10);
+		
+		StuGradeTxt = new JTextField();
+		StuGradeTxt.setColumns(10);
+		
+		StuProTxt = new JTextField();
+		StuProTxt.setColumns(10);
+		
+		StuPhoNumTxt = new JTextField();
+		StuPhoNumTxt.setColumns(10);
+		
+		JButton AddTxt = new JButton("添加");
+		AddTxt.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				StuAddActionPerformed(e);
+			}
+		});
+		
+		JButton ResetTxt = new JButton("重置");
+		ResetTxt.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				resetValueActionPerformed(e);
+			}
+		});
+		GroupLayout groupLayout = new GroupLayout(getContentPane());
+		groupLayout.setHorizontalGroup(
+			groupLayout.createParallelGroup(Alignment.LEADING)
+				.addGroup(groupLayout.createSequentialGroup()
+					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+						.addGroup(groupLayout.createSequentialGroup()
+							.addGap(87)
+							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+								.addGroup(groupLayout.createSequentialGroup()
+									.addPreferredGap(ComponentPlacement.RELATED)
+									.addComponent(lblNewLabel_2_1_1_1, GroupLayout.PREFERRED_SIZE, 58, GroupLayout.PREFERRED_SIZE)
+									.addGap(18)
+									.addComponent(StuPhoNumTxt, GroupLayout.PREFERRED_SIZE, 169, GroupLayout.PREFERRED_SIZE))
+								.addGroup(groupLayout.createSequentialGroup()
+									.addPreferredGap(ComponentPlacement.RELATED)
+									.addComponent(lblNewLabel_2_1_1, GroupLayout.PREFERRED_SIZE, 58, GroupLayout.PREFERRED_SIZE)
+									.addGap(18)
+									.addComponent(StuProTxt, GroupLayout.PREFERRED_SIZE, 169, GroupLayout.PREFERRED_SIZE))
+								.addGroup(groupLayout.createSequentialGroup()
+									.addPreferredGap(ComponentPlacement.RELATED)
+									.addComponent(lblNewLabel_2_1, GroupLayout.PREFERRED_SIZE, 58, GroupLayout.PREFERRED_SIZE)
+									.addGap(18)
+									.addComponent(StuGradeTxt, GroupLayout.PREFERRED_SIZE, 169, GroupLayout.PREFERRED_SIZE))
+								.addGroup(groupLayout.createSequentialGroup()
+									.addPreferredGap(ComponentPlacement.RELATED)
+									.addComponent(lblNewLabel_2, GroupLayout.PREFERRED_SIZE, 58, GroupLayout.PREFERRED_SIZE)
+									.addGap(18)
+									.addComponent(StuClassTxt, GroupLayout.PREFERRED_SIZE, 169, GroupLayout.PREFERRED_SIZE))
+								.addGroup(groupLayout.createSequentialGroup()
+									.addPreferredGap(ComponentPlacement.RELATED)
+									.addComponent(lblNewLabel_1_1, GroupLayout.PREFERRED_SIZE, 58, GroupLayout.PREFERRED_SIZE)
+									.addGap(18)
+									.addComponent(StupwdTxt, GroupLayout.PREFERRED_SIZE, 169, GroupLayout.PREFERRED_SIZE))
+								.addGroup(groupLayout.createSequentialGroup()
+									.addComponent(lblNewLabel_1, GroupLayout.PREFERRED_SIZE, 58, GroupLayout.PREFERRED_SIZE)
+									.addGap(18)
+									.addComponent(StuNameTxt, GroupLayout.PREFERRED_SIZE, 169, GroupLayout.PREFERRED_SIZE))
+								.addGroup(groupLayout.createSequentialGroup()
+									.addComponent(lblNewLabel, GroupLayout.PREFERRED_SIZE, 58, GroupLayout.PREFERRED_SIZE)
+									.addGap(18)
+									.addComponent(StuIdTxt, GroupLayout.PREFERRED_SIZE, 169, GroupLayout.PREFERRED_SIZE))))
+						.addGroup(groupLayout.createSequentialGroup()
+							.addGap(109)
+							.addComponent(AddTxt, GroupLayout.PREFERRED_SIZE, 97, GroupLayout.PREFERRED_SIZE)
+							.addGap(18)
+							.addComponent(ResetTxt, GroupLayout.PREFERRED_SIZE, 97, GroupLayout.PREFERRED_SIZE)))
+					.addContainerGap(106, Short.MAX_VALUE))
+		);
+		groupLayout.setVerticalGroup(
+			groupLayout.createParallelGroup(Alignment.LEADING)
+				.addGroup(groupLayout.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+						.addComponent(StuIdTxt, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(lblNewLabel))
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+						.addComponent(StuNameTxt, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(lblNewLabel_1))
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+						.addComponent(StupwdTxt, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(lblNewLabel_1_1))
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+						.addComponent(StuClassTxt, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(lblNewLabel_2))
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+						.addComponent(StuGradeTxt, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(lblNewLabel_2_1))
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+						.addComponent(StuProTxt, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(lblNewLabel_2_1_1))
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+						.addComponent(StuPhoNumTxt, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(lblNewLabel_2_1_1_1))
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+						.addComponent(AddTxt)
+						.addComponent(ResetTxt))
+					.addGap(23))
+		);
+		getContentPane().setLayout(groupLayout);
+
+	}
+
+private void resetValueActionPerformed(ActionEvent e) {
+		// TODO 自动生成的方法存根
+		this.StuIdTxt.setText("");
+		this.StuNameTxt.setText("");
+		this.StupwdTxt.setText("");
+		this.StuClassTxt.setText("");
+		this.StuGradeTxt.setText("");
+		this.StuProTxt.setText("");
+		this.StuPhoNumTxt.setText("");
+	}
+
+//	private JTextField StuIdTxt;
+//	private JTextField StuNameTxt;
+//	private JTextField StupwdTxt;
+//	private JTextField StuClassTxt;
+//	private JTextField StuGradeTxt;
+//	private JTextField StuProTxt;
+//	private JTextField StuPhoNumTxt;
+	/**
+	 * 
+	 * @param e
+	 */
+	private void StuAddActionPerformed(ActionEvent evt) {
+		// TODO 自动生成的方法存根
+		String stuId = this.StuIdTxt.getText();
+		String stuName = this.StuNameTxt.getText();
+		String stuPwd = this.StupwdTxt.getText();
+		String stuClass = this.StuClassTxt.getText();
+		String stuGrade = this.StuGradeTxt.getText();
+		String stuPro = this.StuProTxt.getText();
+		String stuPhoNum = this.StuPhoNumTxt.getText();
+
+		if(StringUtil.isEmpty(stuId) || StringUtil.isEmpty(stuName) 
+				|| StringUtil.isEmpty(stuPwd) || StringUtil.isEmpty(stuClass) 
+				|| StringUtil.isEmpty(stuGrade) || StringUtil.isEmpty(stuPro)
+				|| StringUtil.isEmpty(stuPhoNum))
+		{
+			JOptionPane.showMessageDialog(null, "请将学生信息填写完整");
+			return;
+		}
+		BeanStuInfo stuInfo = new BeanStuInfo(stuId,stuName,stuPwd,stuClass,stuGrade,stuPro,stuPhoNum);
+		Connection conn = null;
+		try {
+			conn = dbUtil.getConn();
+			int n = stuDao.add(conn, stuInfo);
+			if(n == 1){
+				JOptionPane.showMessageDialog(null, "学生信息添加成功");
+			}else {
+				JOptionPane.showMessageDialog(null, "学生信息添加失败");
+			}
+		}catch(Exception e)
+		{
+			e.printStackTrace();
+			JOptionPane.showMessageDialog(null, "学生信息添加重复");
+		}finally {
+			try {
+				dbUtil.closeConn(conn);
+			}catch(Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+}

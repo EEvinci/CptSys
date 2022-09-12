@@ -1,0 +1,32 @@
+package cn.zucc.edu.dao;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+
+import cn.zucc.edu.models.BeanStuInfo;
+
+public class ChangePwdDao {
+
+	/**
+	 *  修改密码功能
+	 * @param conn
+	 * @param stuInfo
+	 * @return
+	 * @throws Exception
+	 */
+	public int changePwd(Connection conn, BeanStuInfo stuInfo) throws Exception{
+//		BeanStuInfo resultStu = null;
+		String sql = "update stu_info set StuPwd=? where StuId=?";
+		PreparedStatement pstmt = conn.prepareStatement(sql);
+		pstmt.setString(1, stuInfo.getStuPsw());
+		pstmt.setString(2, stuInfo.getStuId());
+//		ResultSet rs = pstmt.executeQuery();
+//		while(rs.next())
+//		{
+//			resultStu = new BeanStuInfo();
+//		}
+		
+		return pstmt.executeUpdate();
+	}
+}

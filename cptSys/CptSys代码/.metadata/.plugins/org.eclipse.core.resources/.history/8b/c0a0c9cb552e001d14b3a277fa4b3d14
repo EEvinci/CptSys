@@ -1,0 +1,183 @@
+package cn.zucc.edu.view;
+
+import java.awt.EventQueue;
+
+import javax.swing.JInternalFrame;
+import javax.swing.GroupLayout;
+import javax.swing.GroupLayout.Alignment;
+
+import cn.zucc.edu.dao.TeamDao;
+import cn.zucc.edu.models.BeanTeam;
+import cn.zucc.edu.util.DBUtil;
+import cn.zucc.edu.util.StringUtil;
+
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
+import java.awt.Font;
+import javax.swing.JTextField;
+import javax.swing.JButton;
+import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.awt.event.ActionEvent;
+
+public class StuCptCreateTeamInterFrm extends JInternalFrame {
+	private JTextField teamId;
+	private JTextField teamName;
+	private JTextField teamNum;
+	private JButton btnNewButton;
+	private JButton btnNewButton_1;
+
+	DBUtil dbUtil = new DBUtil();
+	TeamDao teamDao = new TeamDao();
+	
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					StuCptCreateTeamInterFrm frame = new StuCptCreateTeamInterFrm();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the frame.
+	 */
+	public StuCptCreateTeamInterFrm() {
+		setMaximizable(true);
+		setIconifiable(true);
+		setClosable(true);
+		setBounds(100, 100, 564, 383);
+		
+		JLabel lblNewLabel = new JLabel("队伍编号");
+		lblNewLabel.setFont(new Font("宋体", Font.BOLD, 20));
+		
+		JLabel lblNewLabel_1 = new JLabel("队伍名称");
+		lblNewLabel_1.setFont(new Font("宋体", Font.BOLD, 20));
+		
+		JLabel lblNewLabel_2 = new JLabel("队伍人数");
+		lblNewLabel_2.setFont(new Font("宋体", Font.BOLD, 20));
+		
+		teamId = new JTextField();
+		teamId.setColumns(10);
+		
+		teamName = new JTextField();
+		teamName.setColumns(10);
+		
+		teamNum = new JTextField();
+		teamNum.setColumns(10);
+		
+		btnNewButton = new JButton("确认创建");
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				stuCreateTeamActionPerformed(e);
+			}
+		});
+		btnNewButton.setFont(new Font("宋体", Font.BOLD, 20));
+		
+		btnNewButton_1 = new JButton("重置");
+		btnNewButton_1.setFont(new Font("宋体", Font.BOLD, 20));
+		GroupLayout groupLayout = new GroupLayout(getContentPane());
+		groupLayout.setHorizontalGroup(
+			groupLayout.createParallelGroup(Alignment.LEADING)
+				.addGroup(groupLayout.createSequentialGroup()
+					.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING, false)
+						.addGroup(Alignment.LEADING, groupLayout.createSequentialGroup()
+							.addGap(93)
+							.addComponent(btnNewButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+						.addGroup(Alignment.LEADING, groupLayout.createSequentialGroup()
+							.addGap(129)
+							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+								.addComponent(lblNewLabel)
+								.addComponent(lblNewLabel_1, GroupLayout.PREFERRED_SIZE, 83, GroupLayout.PREFERRED_SIZE)
+								.addComponent(lblNewLabel_2, GroupLayout.PREFERRED_SIZE, 83, GroupLayout.PREFERRED_SIZE))))
+					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+						.addGroup(groupLayout.createSequentialGroup()
+							.addGap(28)
+							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+								.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+									.addComponent(teamId, GroupLayout.PREFERRED_SIZE, 144, GroupLayout.PREFERRED_SIZE)
+									.addComponent(teamName, GroupLayout.DEFAULT_SIZE, 144, Short.MAX_VALUE))
+								.addComponent(teamNum, GroupLayout.PREFERRED_SIZE, 144, GroupLayout.PREFERRED_SIZE))
+							.addGap(168))
+						.addGroup(groupLayout.createSequentialGroup()
+							.addGap(98)
+							.addComponent(btnNewButton_1, GroupLayout.PREFERRED_SIZE, 119, GroupLayout.PREFERRED_SIZE)
+							.addContainerGap())))
+		);
+		groupLayout.setVerticalGroup(
+			groupLayout.createParallelGroup(Alignment.LEADING)
+				.addGroup(groupLayout.createSequentialGroup()
+					.addGap(69)
+					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+						.addComponent(teamId, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addGroup(groupLayout.createSequentialGroup()
+							.addComponent(lblNewLabel)
+							.addGap(18)
+							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+								.addComponent(lblNewLabel_1, GroupLayout.PREFERRED_SIZE, 24, GroupLayout.PREFERRED_SIZE)
+								.addComponent(teamName, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))))
+					.addGap(18)
+					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+						.addComponent(teamNum, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(lblNewLabel_2, GroupLayout.PREFERRED_SIZE, 24, GroupLayout.PREFERRED_SIZE))
+					.addGap(47)
+					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+						.addComponent(btnNewButton)
+						.addComponent(btnNewButton_1, GroupLayout.PREFERRED_SIZE, 33, GroupLayout.PREFERRED_SIZE))
+					.addContainerGap(97, Short.MAX_VALUE))
+		);
+		getContentPane().setLayout(groupLayout);
+
+	}
+	private void resetValueActionPerformed(ActionEvent e) {
+		// TODO 自动生成的方法存根
+		this.teamId.setText("");
+		this.teamName.setText("");
+		this.teamNum.setText("");
+	}
+
+	private void stuCreateTeamActionPerformed(ActionEvent evt) {
+		
+		String teamId = this.teamId.getText();
+		String teamName = this.teamName.getText();
+		String teamMemNum = this.teamNum.getText();
+		
+		
+		if(StringUtil.isEmpty(teamId) || StringUtil.isEmpty(teamName) || StringUtil.isEmpty(teamMemNum)) {
+			JOptionPane.showMessageDialog(null, "请将队伍基本信息填写完整");
+			return;
+		}
+		BeanTeam team = new BeanTeam(teamId,teamName,Integer.parseInt(teamMemNum));
+		Connection conn = null;
+		try{
+			conn = dbUtil.getConn();
+			int n = teamDao.add(conn, team);
+			if(n == 1) {
+				JOptionPane.showMessageDialog(null, "队伍信息添加成功");
+				return;
+			}else {
+				JOptionPane.showMessageDialog(null, "队伍信息添加失败");
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+			JOptionPane.showMessageDialog(null, "队伍信息添加重复");
+		}finally {
+			try {
+				dbUtil.closeConn(conn);
+			}catch(Exception e)
+			{
+				e.printStackTrace();
+			}
+		}
+		
+	}
+
+}

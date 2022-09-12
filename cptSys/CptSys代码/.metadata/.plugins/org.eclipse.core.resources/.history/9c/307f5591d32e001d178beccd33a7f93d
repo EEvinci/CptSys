@@ -1,0 +1,110 @@
+package cn.zucc.edu.dao;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+
+import cn.zucc.edu.models.BeanCptInfo;
+import cn.zucc.edu.models.BeanRegister;
+import cn.zucc.edu.util.BaseException;
+import cn.zucc.edu.util.DBUtil;
+import cn.zucc.edu.util.DbException;
+
+/**
+ * 报名信息管理
+ * @author PC
+ *
+ */
+public class RegiDao {
+	private DBUtil dbUtil = new DBUtil();
+	/**
+	 * 添加学生报名信息
+	 * @param conn
+	 * @param regi
+	 * @return
+	 */
+	public int add(Connection conn, BeanRegister regi) throws Exception{
+		int n  = 0;
+		String sql = "insert into register values(?,?,?,?,?)";
+//		String sql_p = "insert into player values(?,?,?)";
+		
+		try {
+			PreparedStatement pstmt = conn.prepareStatement(sql);
+			PreparedStatement pstmt_p = conn.prepareStatement(sql_p);
+			
+			pstmt.setString(1,regi.getTeamId());
+			pstmt.setString(2,regi.getCptId());
+			pstmt.setString(3,regi.getRegiTime());
+			pstmt.setString(4, regi.getRegiStatus());
+			pstmt.setString(5, regi.getStuId());
+//
+//			pstmt_p.setString(1,regi.getStuId());
+//			pstmt_p.setString(2,regi.getCptId());
+//			pstmt_p.setString(3,regi.getTeamId());
+			
+			
+			pstmt_p.executeUpdate();
+			n = pstmt.executeUpdate();
+			
+			return n;
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		return n;
+		
+	}
+	
+	/**
+	 * 竞赛报名时间查询
+	 */
+	public ResultSet regiTimeQuery(Connection conn, BeanCptInfo cptInfo) throws BaseException{
+		ResultSet rs = null;
+		String sql = "select cpt_info.RegiStart,cpt_info.RegiEnd from cpt_info where cpt_info.CptId = ?";
+		
+		try {
+			conn = dbUtil.getConn();
+			PreparedStatement pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, cptInfo.getCptId());
+			rs = pstmt.executeQuery();
+			return rs;
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		return rs;
+		
+	}
+	
+	/**
+	 * 竞赛报名时间合法性检测
+	 */
+	public int regiTimeJudge(Connection conn, BeanCptInfo cptInfo) throws BaseException{
+		int flag = 0;
+		ResultSet rs = null;
+		
+		try {
+			conn = dbUtil.getConn();
+			rs = this.regiTimeQuery(conn, cptInfo);
+			String regiS = rs.getString(1);
+			String regiE = rs.getString(2);
+			
+			SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd");
+			String regitime = sdf1.format(System.currentTimeMillis());
+			
+			int cpm = regitime.compareTo(regiS);
+			int cpm_2 = regitime.compareTo(regiE);
+			
+			if(cpm > 0 && cpm_2 < 0) {
+				flag = 1;
+			}
+			return flag;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return flag;
+		
+	}
+	
+}

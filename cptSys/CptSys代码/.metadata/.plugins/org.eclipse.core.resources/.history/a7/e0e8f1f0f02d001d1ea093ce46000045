@@ -1,0 +1,444 @@
+package cn.zucc.edu.view;
+
+import java.awt.EventQueue;
+import java.awt.Font;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.util.Vector;
+
+import javax.swing.GroupLayout;
+import javax.swing.GroupLayout.Alignment;
+import javax.swing.JButton;
+import javax.swing.JInternalFrame;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.LayoutStyle.ComponentPlacement;
+import javax.swing.table.DefaultTableModel;
+
+import cn.zucc.edu.dao.CptDao;
+import cn.zucc.edu.dao.CptItemDao;
+import cn.zucc.edu.models.BeanCptInfo;
+import cn.zucc.edu.util.DBUtil;
+import cn.zucc.edu.util.StringUtil;
+
+import javax.swing.JTextField;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import javax.swing.JPanel;
+import javax.swing.border.TitledBorder;
+import javax.swing.border.EtchedBorder;
+import java.awt.Color;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+
+public class AdminRUDCptInterFrm extends JInternalFrame {
+	private JTable CptInfoTable;
+
+	private DBUtil dbUtil = new DBUtil();
+	private CptDao cptDao = new CptDao();
+	
+	private JTextField CptIdTxt;
+	private JTextField textField;
+	private JTextField textField_1;
+	private JTextField textField_2;
+	private JTextField textField_3;
+	private JTextField textField_4;
+	private JTextField textField_5;
+	private JTextField textField_6;
+	private JTextField textField_7;
+	private JTextField textField_8;
+	private JTextField textField_9;
+	
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					AdminRUDCptInterFrm frame = new AdminRUDCptInterFrm();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the frame.
+	 */
+	public AdminRUDCptInterFrm() {
+		setIconifiable(true);
+		setTitle("查询/修改/删除竞赛信息");
+		setToolTipText("");
+		setClosable(true);
+		setMaximizable(true);
+		setBounds(100, 100, 1000, 550);
+		
+		JScrollPane scrollPane = new JScrollPane();
+		
+		JButton btnNewButton = new JButton("查询");
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				CptInfoSearchActionPerformed(e);
+			}
+		});
+		btnNewButton.setFont(new Font("宋体", Font.BOLD, 20));
+		
+		CptIdTxt = new JTextField();
+		CptIdTxt.setColumns(10);
+		
+		JLabel lblNewLabel = new JLabel("竞赛编号");
+		lblNewLabel.setFont(new Font("宋体", Font.BOLD, 20));
+		
+		JPanel panel = new JPanel();
+		panel.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)), "\u7ADE\u8D5B\u4FE1\u606F\u64CD\u4F5C", TitledBorder.LEADING, TitledBorder.TOP, null, Color.DARK_GRAY));
+		GroupLayout groupLayout = new GroupLayout(getContentPane());
+		groupLayout.setHorizontalGroup(
+			groupLayout.createParallelGroup(Alignment.LEADING)
+				.addGroup(groupLayout.createSequentialGroup()
+					.addGap(23)
+					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+						.addComponent(panel, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 937, Short.MAX_VALUE)
+						.addComponent(scrollPane, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 937, Short.MAX_VALUE))
+					.addGap(24))
+				.addGroup(groupLayout.createSequentialGroup()
+					.addGap(261)
+					.addComponent(lblNewLabel, GroupLayout.PREFERRED_SIZE, 84, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addComponent(CptIdTxt, GroupLayout.PREFERRED_SIZE, 197, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED, 41, Short.MAX_VALUE)
+					.addComponent(btnNewButton, GroupLayout.PREFERRED_SIZE, 97, GroupLayout.PREFERRED_SIZE)
+					.addGap(294))
+		);
+		groupLayout.setVerticalGroup(
+			groupLayout.createParallelGroup(Alignment.LEADING)
+				.addGroup(groupLayout.createSequentialGroup()
+					.addGap(18)
+					.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
+						.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+							.addComponent(btnNewButton)
+							.addComponent(CptIdTxt, GroupLayout.PREFERRED_SIZE, 29, GroupLayout.PREFERRED_SIZE))
+						.addComponent(lblNewLabel))
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 223, GroupLayout.PREFERRED_SIZE)
+					.addGap(28)
+					.addComponent(panel, GroupLayout.PREFERRED_SIZE, 179, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap(29, Short.MAX_VALUE))
+		);
+		
+		JLabel lblNewLabel_1 = new JLabel("竞赛编号");
+		lblNewLabel_1.setBounds(16, 27, 66, 19);
+		lblNewLabel_1.setFont(new Font("宋体", Font.BOLD, 16));
+		
+		textField = new JTextField();
+		textField.setEditable(false);
+		textField.setBounds(92, 27, 77, 21);
+		textField.setColumns(10);
+		
+		JLabel lblNewLabel_1_2 = new JLabel("赛项编号");
+		lblNewLabel_1_2.setBounds(212, 27, 66, 19);
+		lblNewLabel_1_2.setFont(new Font("宋体", Font.BOLD, 16));
+		
+		textField_1 = new JTextField();
+		textField_1.setBounds(288, 27, 85, 21);
+		textField_1.setColumns(10);
+		
+		JLabel lblNewLabel_1_2_1 = new JLabel("竞赛名称");
+		lblNewLabel_1_2_1.setBounds(413, 27, 66, 19);
+		lblNewLabel_1_2_1.setFont(new Font("宋体", Font.BOLD, 16));
+		
+		textField_2 = new JTextField();
+		textField_2.setBounds(489, 27, 85, 21);
+		textField_2.setColumns(10);
+		
+		JLabel lblNewLabel_1_2_2 = new JLabel("举办期届");
+		lblNewLabel_1_2_2.setBounds(584, 27, 66, 19);
+		lblNewLabel_1_2_2.setFont(new Font("宋体", Font.BOLD, 16));
+		
+		textField_3 = new JTextField();
+		textField_3.setBounds(660, 27, 90, 21);
+		textField_3.setColumns(10);
+		
+		JLabel lblNewLabel_1_2_3 = new JLabel("举办年份");
+		lblNewLabel_1_2_3.setBounds(760, 30, 66, 19);
+		lblNewLabel_1_2_3.setFont(new Font("宋体", Font.BOLD, 16));
+		
+		textField_4 = new JTextField();
+		textField_4.setBounds(836, 30, 91, 21);
+		textField_4.setColumns(10);
+		
+		JLabel lblNewLabel_1_1 = new JLabel("举办时间");
+		lblNewLabel_1_1.setBounds(16, 72, 66, 18);
+		lblNewLabel_1_1.setFont(new Font("宋体", Font.BOLD, 16));
+		
+		textField_5 = new JTextField();
+		textField_5.setBounds(92, 72, 77, 21);
+		textField_5.setColumns(10);
+		
+		JLabel lblNewLabel_1_2_4 = new JLabel("报名开始时间");
+		lblNewLabel_1_2_4.setFont(new Font("宋体", Font.BOLD, 16));
+		lblNewLabel_1_2_4.setBounds(179, 71, 99, 21);
+		
+		textField_6 = new JTextField();
+		textField_6.setBounds(288, 72, 85, 21);
+		textField_6.setColumns(10);
+		
+		textField_7 = new JTextField();
+		textField_7.setBounds(489, 69, 85, 21);
+		textField_7.setColumns(10);
+		
+		JLabel lblNewLabel_1_2_2_1 = new JLabel("联系老师");
+		lblNewLabel_1_2_2_1.setFont(new Font("宋体", Font.BOLD, 16));
+		lblNewLabel_1_2_2_1.setBounds(584, 72, 66, 18);
+		
+		textField_8 = new JTextField();
+		textField_8.setBounds(660, 69, 90, 21);
+		textField_8.setColumns(10);
+		
+		JLabel lblNewLabel_1_2_3_1 = new JLabel("竞赛官网");
+		lblNewLabel_1_2_3_1.setFont(new Font("宋体", Font.BOLD, 16));
+		lblNewLabel_1_2_3_1.setBounds(760, 75, 66, 18);
+		
+		textField_9 = new JTextField();
+		textField_9.setBounds(836, 72, 91, 21);
+		textField_9.setColumns(10);
+		
+		JLabel lblNewLabel_1_2_4_1 = new JLabel("报名结束时间");
+		lblNewLabel_1_2_4_1.setFont(new Font("宋体", Font.BOLD, 16));
+		lblNewLabel_1_2_4_1.setBounds(378, 72, 101, 21);
+		
+		JButton btnNewButton_1 = new JButton("修改");
+		btnNewButton_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				CptInfoUpdateActionPerformed(e);
+			}
+		});
+		btnNewButton_1.setBounds(239, 127, 97, 33);
+		btnNewButton_1.setFont(new Font("宋体", Font.BOLD, 20));
+		
+		JButton btnNewButton_2 = new JButton("删除");
+		btnNewButton_2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				CptInfoDeleteActionPerformed(e);
+			}
+		});
+		btnNewButton_2.setBounds(602, 127, 97, 33);
+		btnNewButton_2.setFont(new Font("宋体", Font.BOLD, 20));
+		panel.setLayout(null);
+		panel.add(lblNewLabel_1);
+		panel.add(textField);
+		panel.add(lblNewLabel_1_2);
+		panel.add(textField_1);
+		panel.add(lblNewLabel_1_2_1);
+		panel.add(textField_2);
+		panel.add(lblNewLabel_1_2_2);
+		panel.add(textField_3);
+		panel.add(lblNewLabel_1_2_3);
+		panel.add(textField_4);
+		panel.add(btnNewButton_1);
+		panel.add(lblNewLabel_1_1);
+		panel.add(textField_5);
+		panel.add(lblNewLabel_1_2_4);
+		panel.add(textField_6);
+		panel.add(lblNewLabel_1_2_4_1);
+		panel.add(textField_7);
+		panel.add(lblNewLabel_1_2_2_1);
+		panel.add(textField_8);
+		panel.add(lblNewLabel_1_2_3_1);
+		panel.add(textField_9);
+		panel.add(btnNewButton_2);
+		
+		CptInfoTable = new JTable();
+		CptInfoTable.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				cptInfoTableMousePressed(e);
+			}
+		});
+		CptInfoTable.setModel(new DefaultTableModel(
+			new Object[][] {
+			},
+			new String[] {
+				"\u6240\u5C5E\u8D5B\u9879\u7F16\u53F7", "\u7ADE\u8D5B\u7F16\u53F7", "\u7ADE\u8D5B\u540D\u79F0", "\u4E3E\u529E\u671F\u5C4A", "\u4E3E\u529E\u5E74\u4EFD", "\u4E3E\u529E\u65F6\u95F4", "\u62A5\u540D\u5F00\u59CB\u65F6\u95F4", "\u62A5\u540D\u7ED3\u675F\u65F6\u95F4", "\u8054\u7CFB\u8001\u5E08", "\u7ADE\u8D5B\u5B98\u7F51"
+			}
+		));
+		CptInfoTable.getColumnModel().getColumn(6).setPreferredWidth(97);
+		CptInfoTable.getColumnModel().getColumn(7).setPreferredWidth(93);
+		scrollPane.setViewportView(CptInfoTable);
+		getContentPane().setLayout(groupLayout);
+		
+		this.fillTable(new BeanCptInfo());//将表中的信息传入到表格中
+
+	}
+	
+	
+	/**
+	 * 竞赛信息删除
+	 * @param evt
+	 */
+	private void CptInfoDeleteActionPerformed(ActionEvent evt) {
+		String id = textField.getText();
+		if(StringUtil.isEmpty(id)) {
+			JOptionPane.showMessageDialog(null, "请选择要删除的记录");
+			return;
+		}
+		int n = JOptionPane.showConfirmDialog(null, "确认要删除此记录吗？");
+		if(n == 0) {
+			Connection conn = null;
+			try {
+				conn = dbUtil.getConn();
+				int delete = cptDao.delete(conn, id);
+				if(delete == 0) {
+					JOptionPane.showMessageDialog(null, "删除成功");
+					this.reSetValue();
+					this.fillTable(new BeanCptInfo());
+				}else {
+					JOptionPane.showMessageDialog(null, "删除失败");
+				}
+			}catch(Exception e) {
+				e.printStackTrace();
+				JOptionPane.showMessageDialog(null, "删除失败");
+			}
+		}
+	}
+
+	
+	/**
+	 * 竞赛信息修改
+	 * @param e
+	 */
+	private void CptInfoUpdateActionPerformed(ActionEvent evt) {
+		// TODO 自动生成的方法存根
+		String cptItemId = textField.getText();
+		String cptId = textField_1.getText();
+		String cptName = textField_2.getText();
+		String cptYear = textField_3.getText();
+		String holdYear = textField_4.getText();
+		String holdDay = textField_5.getText();
+		String regiStart = textField_6.getText();
+		String regiEnd = textField_7.getText();
+		String contact = textField_8.getText();
+		String web = textField_9.getText();
+		
+		if(StringUtil.isEmpty(cptId)) {
+			JOptionPane.showMessageDialog(null, "请选择要修改的记录");
+			return;
+		}
+		if(StringUtil.isEmpty(cptId) || StringUtil.isEmpty(cptItemId) || StringUtil.isEmpty(cptName) 
+				|| StringUtil.isEmpty(cptYear) || StringUtil.isEmpty(holdYear) || StringUtil.isEmpty(holdDay) 
+				|| StringUtil.isEmpty(regiStart) || StringUtil.isEmpty(regiEnd) || StringUtil.isEmpty(contact) 
+				|| StringUtil.isEmpty(web)){
+			JOptionPane.showMessageDialog(null, "请将要修改的信息填写完整");
+			return;
+		}
+		
+		BeanCptInfo cptInfo = new BeanCptInfo(cptId,cptItemId,cptName,cptYear,holdYear,holdDay,regiStart,regiEnd,contact,web);
+		Connection conn = null;
+		
+		try {
+			conn = dbUtil.getConn();
+			int rs = cptDao.update(conn, cptInfo);
+			if(rs == 1) {
+				JOptionPane.showMessageDialog(null, "修改成功");
+				
+				this.reSetValue();//清楚留在表格中的数据
+				
+				this.fillTable(new BeanCptInfo());//在上面的table中显示已经更新过的信息
+			}else {
+				JOptionPane.showMessageDialog(null, "修改失败");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			JOptionPane.showMessageDialog(null, "修改失败");
+		}	
+	}
+	
+	/**
+	 *重置表单 
+	 */
+	private void reSetValue() {
+		this.textField.setText("");
+		this.textField_1.setText("");
+		this.textField_2.setText("");
+		this.textField_3.setText("");
+		this.textField_4.setText("");
+		this.textField_5.setText("");
+		this.textField_6.setText("");
+		this.textField_7.setText("");
+		this.textField_8.setText("");
+		this.textField_9.setText("");
+	}
+
+	
+	/**
+	 * 表格行点击事件处理	
+	 * @param e
+	 */
+	private void cptInfoTableMousePressed(MouseEvent e) {
+		int row = CptInfoTable.getSelectedRow();
+		
+		textField.setText((String)CptInfoTable.getValueAt(row, 0));
+		textField_1.setText((String)CptInfoTable.getValueAt(row, 1));
+		textField_2.setText((String)CptInfoTable.getValueAt(row, 2));
+		textField_3.setText((String)CptInfoTable.getValueAt(row, 3));
+		textField_4.setText((String)CptInfoTable.getValueAt(row, 4));
+		textField_5.setText((String)CptInfoTable.getValueAt(row, 5));
+		textField_6.setText((String)CptInfoTable.getValueAt(row, 6));
+		textField_7.setText((String)CptInfoTable.getValueAt(row, 7));
+		textField_8.setText((String)CptInfoTable.getValueAt(row, 8));
+		textField_9.setText((String)CptInfoTable.getValueAt(row, 9));
+	}
+
+	
+	/**
+	 * 竞赛信息查询
+	 * @param e
+	 */
+	private void CptInfoSearchActionPerformed(ActionEvent e) {
+		String CptId = this.CptIdTxt.getText();
+		BeanCptInfo cptInfo = new BeanCptInfo();
+		cptInfo.setCptId(CptId);
+		this.fillTable(cptInfo);
+	}
+
+	
+	/**
+	 * 竞赛信息显示填充表格
+	 * @param cptInfo
+	 */
+	private void fillTable(BeanCptInfo cptInfo) {
+		DefaultTableModel dtm = (DefaultTableModel) CptInfoTable.getModel();
+		dtm.setRowCount(0);
+		Connection conn = null;
+		try {
+			conn = dbUtil.getConn();
+			ResultSet rs = cptDao.query(conn,cptInfo);
+			while(rs.next())
+			{
+				Vector v = new Vector();
+				v.add(rs.getString("CptItemId"));
+				v.add(rs.getString("CptId"));
+				v.add(rs.getString("CptName"));
+				v.add(rs.getString("CptYear"));
+				v.add(rs.getString("HoldYear"));
+				v.add(rs.getString("HoldDay"));
+				v.add(rs.getString("RegiStart"));
+				v.add(rs.getString("RegiEnd"));
+				v.add(rs.getString("Contact"));
+				v.add(rs.getString("Web"));
+				
+
+				dtm.addRow(v);
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+	}
+	
+	
+}

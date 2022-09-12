@@ -1,0 +1,215 @@
+package cn.zucc.edu.view;
+
+import java.awt.EventQueue;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.Connection;
+
+import javax.swing.GroupLayout;
+import javax.swing.GroupLayout.Alignment;
+import javax.swing.JButton;
+import javax.swing.JInternalFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JTextField;
+import javax.swing.LayoutStyle.ComponentPlacement;
+
+import cn.zucc.edu.dao.TeamDao;
+import cn.zucc.edu.models.BeanTeam;
+import cn.zucc.edu.util.DBUtil;
+import cn.zucc.edu.util.StringUtil;
+
+public class AdminTeamAddInterFrm extends JInternalFrame {
+	private JTextField TeamIdTxt;
+	private JTextField TeamNameTxt;
+	private JTextField TeamMemNumTxt;
+	private JTextField IsFinCptTxt;
+	private JTextField RwdGradeTxt;
+
+	
+	DBUtil dbUtil = new DBUtil();
+	TeamDao teamDao = new TeamDao();
+	
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					AdminTeamAddInterFrm frame = new AdminTeamAddInterFrm();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the frame.
+	 */
+	public AdminTeamAddInterFrm() {
+		setResizable(true);
+		setIconifiable(true);
+		setMaximizable(true);
+		setBounds(100, 100, 450, 300);
+		
+		JLabel lblNewLabel = new JLabel("队伍编号");
+		
+		JLabel lblNewLabel_1 = new JLabel("队伍名称");
+		
+		JLabel lblNewLabel_2 = new JLabel("队员数量");
+		
+		JLabel lblNewLabel_3 = new JLabel("是否完赛");
+		
+		JLabel lblNewLabel_4 = new JLabel("获奖等级");
+		
+		TeamIdTxt = new JTextField();
+		TeamIdTxt.setColumns(10);
+		
+		TeamNameTxt = new JTextField();
+		TeamNameTxt.setColumns(10);
+		
+		TeamMemNumTxt = new JTextField();
+		TeamMemNumTxt.setColumns(10);
+		
+		IsFinCptTxt = new JTextField();
+		IsFinCptTxt.setColumns(10);
+		
+		RwdGradeTxt = new JTextField();
+		RwdGradeTxt.setColumns(10);
+		
+		JButton AddTxt = new JButton("添加");
+		AddTxt.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				teamAddActionPerformed(e);
+			}
+		});
+		
+		JButton ResetTxt = new JButton("重置");
+		ResetTxt.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				resetValueActionPerformed(e);
+			}
+		});
+		GroupLayout groupLayout = new GroupLayout(getContentPane());
+		groupLayout.setHorizontalGroup(
+			groupLayout.createParallelGroup(Alignment.LEADING)
+				.addGroup(groupLayout.createSequentialGroup()
+					.addGap(101)
+					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+						.addGroup(groupLayout.createSequentialGroup()
+							.addGap(12)
+							.addComponent(AddTxt, GroupLayout.PREFERRED_SIZE, 97, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.UNRELATED)
+							.addComponent(ResetTxt, GroupLayout.PREFERRED_SIZE, 97, GroupLayout.PREFERRED_SIZE))
+						.addGroup(groupLayout.createSequentialGroup()
+							.addComponent(lblNewLabel_4, GroupLayout.PREFERRED_SIZE, 58, GroupLayout.PREFERRED_SIZE)
+							.addGap(18)
+							.addComponent(RwdGradeTxt, GroupLayout.PREFERRED_SIZE, 155, GroupLayout.PREFERRED_SIZE))
+						.addGroup(groupLayout.createSequentialGroup()
+							.addComponent(lblNewLabel_3, GroupLayout.PREFERRED_SIZE, 58, GroupLayout.PREFERRED_SIZE)
+							.addGap(18)
+							.addComponent(IsFinCptTxt, GroupLayout.PREFERRED_SIZE, 155, GroupLayout.PREFERRED_SIZE))
+						.addGroup(groupLayout.createSequentialGroup()
+							.addComponent(lblNewLabel_2, GroupLayout.PREFERRED_SIZE, 58, GroupLayout.PREFERRED_SIZE)
+							.addGap(18)
+							.addComponent(TeamMemNumTxt, GroupLayout.PREFERRED_SIZE, 155, GroupLayout.PREFERRED_SIZE))
+						.addGroup(groupLayout.createSequentialGroup()
+							.addComponent(lblNewLabel, GroupLayout.PREFERRED_SIZE, 58, GroupLayout.PREFERRED_SIZE)
+							.addGap(18)
+							.addComponent(TeamIdTxt, GroupLayout.PREFERRED_SIZE, 155, GroupLayout.PREFERRED_SIZE))
+						.addGroup(groupLayout.createSequentialGroup()
+							.addComponent(lblNewLabel_1, GroupLayout.PREFERRED_SIZE, 58, GroupLayout.PREFERRED_SIZE)
+							.addGap(18)
+							.addComponent(TeamNameTxt, GroupLayout.PREFERRED_SIZE, 155, GroupLayout.PREFERRED_SIZE)))
+					.addContainerGap(106, Short.MAX_VALUE))
+		);
+		groupLayout.setVerticalGroup(
+			groupLayout.createParallelGroup(Alignment.LEADING)
+				.addGroup(groupLayout.createSequentialGroup()
+					.addGap(45)
+					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+						.addComponent(lblNewLabel)
+						.addComponent(TeamIdTxt, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+						.addComponent(TeamNameTxt, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(lblNewLabel_1))
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+						.addComponent(TeamMemNumTxt, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(lblNewLabel_2))
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+						.addComponent(IsFinCptTxt, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(lblNewLabel_3))
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+						.addComponent(RwdGradeTxt, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(lblNewLabel_4))
+					.addGap(26)
+					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+						.addComponent(AddTxt)
+						.addComponent(ResetTxt))
+					.addContainerGap(36, Short.MAX_VALUE))
+		);
+		getContentPane().setLayout(groupLayout);
+
+	}
+
+	private void resetValueActionPerformed(ActionEvent e) {
+		// TODO 自动生成的方法存根
+		this.TeamIdTxt.setText("");
+		this.TeamNameTxt.setText("");
+		this.TeamMemNumTxt.setText("");
+		this.IsFinCptTxt.setText("");
+		this.RwdGradeTxt.setText("");
+	}
+
+	/*
+	 * 	private JTextField TeamIdTxt;
+		private JTextField TeamNameTxt;
+		private JTextField TeamMemNumTxt;
+		private JTextField IsFinCptTxt;
+		private JTextField RwdGradeTxt;
+	 */
+	private void teamAddActionPerformed(ActionEvent evt) {
+		// TODO 自动生成的方法存根
+		String teamId = this.TeamIdTxt.getText();
+		String teamName = this.TeamNameTxt.getText();
+		String teamMemNum = this.TeamMemNumTxt.getText();
+		String isFinCpt = this.IsFinCptTxt.getText();
+		String rwdGrade = this.RwdGradeTxt.getText();
+		
+		
+		if(StringUtil.isEmpty(teamId) || StringUtil.isEmpty(teamName) || StringUtil.isEmpty(teamMemNum)) {
+			JOptionPane.showMessageDialog(null, "请将队伍基本信息填写完整");
+			return;
+		}
+		BeanTeam team = new BeanTeam(teamId,teamName,Integer.parseInt(teamMemNum),isFinCpt,rwdGrade);
+		Connection conn = null;
+		try{
+			conn = dbUtil.getConn();
+			int n = teamDao.add(conn, team);
+			if(n == 1) {
+				JOptionPane.showMessageDialog(null, "队伍信息添加成功");
+				return;
+			}else {
+				JOptionPane.showMessageDialog(null, "队伍信息添加失败");
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+			JOptionPane.showMessageDialog(null, "队伍信息已经存在");
+		}finally {
+			try {
+				dbUtil.closeConn(conn);
+			}catch(Exception e)
+			{
+				e.printStackTrace();
+			}
+		}
+	}
+
+}

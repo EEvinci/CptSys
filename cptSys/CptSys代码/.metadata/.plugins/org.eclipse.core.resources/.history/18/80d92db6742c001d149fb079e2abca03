@@ -1,0 +1,83 @@
+package cn.zucc.edu.dao;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import cn.zucc.edu.models.BeanStuInfo;
+import cn.zucc.edu.models.BeanTeam;
+import cn.zucc.edu.util.BaseException;
+import cn.zucc.edu.util.DbException;
+import cn.zucc.edu.util.StringUtil;
+
+/**
+ * 队伍信息管理
+ * @author PC
+ *
+ */
+public class TeamDao {
+
+	/**
+	 * 队伍添加
+	 * @param conn
+	 * @param team
+	 * @return
+	 * @throws Exception
+	 */
+	public int add(Connection conn, BeanTeam team) throws BaseException{
+		
+		String sql = "insert into team values(?,?,?,?,?)";
+		conn = null;
+		
+		try {
+			PreparedStatement pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setString(1,team.getTeamId());
+			pstmt.setString(2,team.getTeamName());
+			pstmt.setInt(3,team.getMemNum());
+			pstmt.setString(4,team.getRwdGrade());
+			pstmt.setString(5,team.getIsFinCpt());
+			
+			return pstmt.executeUpdate();
+		}catch (SQLException e) {
+            e.printStackTrace();
+            throw new DbException(e);
+        } finally {
+            if (conn != null)
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+        }
+	}
+	
+	/**
+	 * 查询队伍信息
+	 * @param conn
+	 * @param team
+	 * @return
+	 * @throws BaseException
+	 */
+	public ResultSet query(Connection conn,BeanTeam team)throws BaseException{
+
+		ResultSet rs = null;
+		StringBuffer sb = new StringBuffer("select * from team");
+		
+		try {
+			if(StringUtil.isNotEmpty(team.getTeamId())){
+				sb.append(" and TeamId = " + team.getTeamId());
+			}
+			PreparedStatement pstmt = conn.prepareStatement(sb.toString().replaceFirst("and", "where"));
+			rs = pstmt.executeQuery();
+			
+			return rs;
+		}catch(SQLException e){
+			e.printStackTrace();
+			throw new DbException(e);
+		}
+	}
+	
+}

@@ -1,0 +1,117 @@
+package cn.zucc.edu.view;
+
+import java.awt.BorderLayout;
+import java.awt.EventQueue;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
+import javax.swing.GroupLayout;
+import javax.swing.GroupLayout.Alignment;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
+import java.awt.Font;
+import javax.swing.JTextField;
+import javax.swing.LayoutStyle.ComponentPlacement;
+import javax.swing.JPasswordField;
+import javax.swing.JButton;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+
+public class StuChangePwdFrm extends JFrame {
+
+	private JPanel contentPane;
+	private JTextField textField;
+	private JPasswordField passwordField;
+	private JPasswordField passwordField_1;
+	private JPasswordField passwordField_2;
+
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					StuChangePwdFrm frame = new StuChangePwdFrm();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the frame.
+	 */
+	public StuChangePwdFrm() {
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 450, 300);
+		contentPane = new JPanel();
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		setContentPane(contentPane);
+		
+		JLabel lblNewLabel = new JLabel("学    号");
+		lblNewLabel.setBounds(59, 30, 83, 24);
+		lblNewLabel.setFont(new Font("宋体", Font.BOLD, 20));
+		
+		JLabel lblNewLabel_1 = new JLabel("原 密 码");
+		lblNewLabel_1.setBounds(59, 72, 83, 24);
+		lblNewLabel_1.setFont(new Font("宋体", Font.BOLD, 20));
+		
+		JLabel lblNewLabel_1_1 = new JLabel("新 密 码");
+		lblNewLabel_1_1.setBounds(59, 118, 120, 24);
+		lblNewLabel_1_1.setFont(new Font("宋体", Font.BOLD, 20));
+		
+		JLabel lblNewLabel_1_1_1 = new JLabel("确认密码");
+		lblNewLabel_1_1_1.setBounds(59, 160, 91, 24);
+		lblNewLabel_1_1_1.setFont(new Font("宋体", Font.BOLD, 20));
+		
+		textField = new JTextField();
+		textField.setBounds(183, 30, 168, 21);
+		textField.setColumns(10);
+		contentPane.setLayout(null);
+		contentPane.add(lblNewLabel_1);
+		contentPane.add(lblNewLabel);
+		contentPane.add(lblNewLabel_1_1_1);
+		contentPane.add(lblNewLabel_1_1);
+		contentPane.add(textField);
+		
+		passwordField = new JPasswordField();
+		passwordField.setBounds(183, 76, 168, 21);
+		contentPane.add(passwordField);
+		
+		passwordField_1 = new JPasswordField();
+		passwordField_1.setBounds(183, 118, 168, 21);
+		contentPane.add(passwordField_1);
+		
+		passwordField_2 = new JPasswordField();
+		passwordField_2.setBounds(183, 160, 168, 21);
+		contentPane.add(passwordField_2);
+		
+		JButton btnNewButton = new JButton("修改");
+		btnNewButton.setFont(new Font("宋体", Font.BOLD, 20));
+		btnNewButton.setBounds(48, 214, 104, 39);
+		contentPane.add(btnNewButton);
+		
+		JButton btnNewButton_1 = new JButton("重置");
+		btnNewButton_1.setFont(new Font("宋体", Font.BOLD, 20));
+		btnNewButton_1.setBounds(183, 214, 104, 39);
+		contentPane.add(btnNewButton_1);
+		
+		JButton btnNewButton_1_1 = new JButton("退出");
+		btnNewButton_1_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				StuLogOnFrm_1 stuLog = new StuLogOnFrm_1();
+				JOptionPane.showConfirmDialog(null, "即将返回学生登陆界面");
+				stuLog.setVisible(true);
+				dispose();
+			}
+		});
+		btnNewButton_1_1.setFont(new Font("宋体", Font.BOLD, 20));
+		btnNewButton_1_1.setBounds(307, 214, 104, 39);
+		contentPane.add(btnNewButton_1_1);
+	}
+}

@@ -1,0 +1,57 @@
+package cn.zucc.edu.dao;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import cn.zucc.edu.models.BeanAdminInfo;
+import cn.zucc.edu.util.BaseException;
+import cn.zucc.edu.util.DbException;
+
+/**
+ * 管理员登录信息管理
+ * @author PC
+ *
+ */
+public class AdminLogDao {
+	
+	/**
+	 * 管理员登陆
+	 * @param conn
+	 * @param admin
+	 * @return
+	 * @throws Exception
+	 */
+	public static BeanAdminInfo login(Connection conn, BeanAdminInfo admin) throws BaseException {
+		// TODO 自动生成的方法存根
+		BeanAdminInfo resultAdmin = null;
+		String sql = "select AdminId,AdPsw from admin_info where AdminId=? and AdPsw=?";
+		
+		try{
+			PreparedStatement pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, admin.getAminId());
+			pstmt.setString(2, admin.getAdPsw());
+			ResultSet rs = pstmt.executeQuery();
+			if(rs.next())
+			{
+				resultAdmin = new BeanAdminInfo();
+				resultAdmin.setAdminId("id");
+				resultAdmin.setAdPsw("password");
+			}
+			return resultAdmin;
+		}catch (SQLException e) {
+            e.printStackTrace();
+            throw new DbException(e);
+        } finally {
+            if (conn != null)
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+        }
+	}
+
+}

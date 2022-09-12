@@ -1,0 +1,189 @@
+package cn.zucc.edu.view;
+
+import java.awt.BorderLayout;
+import java.awt.EventQueue;
+import java.awt.Frame;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
+
+public class AdminMainFrm extends JFrame {
+
+	private JPanel contentPane;
+
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					AdminMainFrm frame = new AdminMainFrm();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the frame.
+	 */
+	public AdminMainFrm() {
+		setTitle("CompetitionSys管理员模式");
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 1069, 830);
+		
+		JMenuBar menuBar = new JMenuBar();
+		setJMenuBar(menuBar);
+		
+		JMenu SysMng = new JMenu("系统管理");
+		menuBar.add(SysMng);
+		
+		JMenu mnNewMenu_2 = new JMenu("学生管理");
+		SysMng.add(mnNewMenu_2);
+		
+		JMenuItem mntmNewMenuItem_3 = new JMenuItem("添加学生信息");
+		mntmNewMenuItem_3.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				AdminAddStuInterFrm adminStuAddInterFrm = new AdminAddStuInterFrm();
+				adminStuAddInterFrm.setVisible(true);
+				contentPane.add(adminStuAddInterFrm);
+			}
+		});
+		mnNewMenu_2.add(mntmNewMenuItem_3);
+		
+		JMenuItem mntmNewMenuItem_4 = new JMenuItem("查询/修改/删除学生信息");
+		mntmNewMenuItem_4.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				AdminRUDStuInterFrm adminRUDStuInterFrm = new AdminRUDStuInterFrm();
+				adminRUDStuInterFrm.setVisible(true);
+				contentPane.add(adminRUDStuInterFrm);
+			}
+		});
+		mnNewMenu_2.add(mntmNewMenuItem_4);
+		
+		JMenu mnNewMenu = new JMenu("赛项管理");
+		SysMng.add(mnNewMenu);
+		
+		JMenuItem mntmNewMenuItem_1 = new JMenuItem("添加赛项信息");
+		mntmNewMenuItem_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				AdminAddCptItemInterFrm cptItemAddInterFrm = new AdminAddCptItemInterFrm();
+				cptItemAddInterFrm.setVisible(true);
+				contentPane.add(cptItemAddInterFrm);
+			}
+		});
+		mnNewMenu.add(mntmNewMenuItem_1);
+		
+		JMenuItem mntmNewMenuItem_2 = new JMenuItem("查询/修改/删除赛项信息");
+		mntmNewMenuItem_2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				AdminRUDCptItemInterFrm adminRUDCptItemInterFrm = new AdminRUDCptItemInterFrm();
+				adminRUDCptItemInterFrm.setVisible(true);
+				contentPane.add(adminRUDCptItemInterFrm);
+			}
+		});
+		mnNewMenu.add(mntmNewMenuItem_2);
+		
+		JMenu mnNewMenu_3 = new JMenu("竞赛管理");
+		SysMng.add(mnNewMenu_3);
+		
+		JMenuItem mntmNewMenuItem_5 = new JMenuItem("添加竞赛信息");
+		mntmNewMenuItem_5.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				AdminAddCptInterFrm adminCptAddInterFrm = new AdminAddCptInterFrm();
+				adminCptAddInterFrm.setVisible(true);
+				contentPane.add(adminCptAddInterFrm);
+			}
+		});
+		mnNewMenu_3.add(mntmNewMenuItem_5);
+		
+		JMenuItem mntmNewMenuItem_6 = new JMenuItem("查询/修改/删除竞赛信息");
+		mntmNewMenuItem_6.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				AdminRUDCptInterFrm adminRUDCptInterFrm = new AdminRUDCptInterFrm();
+				adminRUDCptInterFrm.setVisible(true);
+				contentPane.add(adminRUDCptInterFrm);
+			}
+		});
+		mnNewMenu_3.add(mntmNewMenuItem_6);
+		
+		/*
+		 * 管理员安全退出功能
+		 */
+		JMenuItem mntmNewMenuItem = new JMenuItem("安全退出");
+		mntmNewMenuItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int res = JOptionPane.showConfirmDialog(null, "是否确认退出");
+				if(res == 0) {
+					dispose();
+				}
+				else if(res == 1)
+				{
+					JOptionPane.showMessageDialog(null, "再多管理一会吧");
+				}
+			}
+		});
+		
+		JMenu mnNewMenu_4 = new JMenu("队伍管理");
+		SysMng.add(mnNewMenu_4);
+		
+		JMenuItem mntmNewMenuItem_7 = new JMenuItem("添加队伍(设置获奖等级)");
+		mntmNewMenuItem_7.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				AdminAddTeamInterFrm adminTeamAddInterFrm = new AdminAddTeamInterFrm();
+				adminTeamAddInterFrm.setVisible(true);
+				contentPane.add(adminTeamAddInterFrm);
+			}
+		});
+		mnNewMenu_4.add(mntmNewMenuItem_7);
+		
+		JMenuItem mntmNewMenuItem_8 = new JMenuItem("查询/修改队伍(获奖等级)");
+		mnNewMenu_4.add(mntmNewMenuItem_8);
+		SysMng.add(mntmNewMenuItem);
+		
+		JMenu mnNewMenu_1 = new JMenu("查询统计");
+		menuBar.add(mnNewMenu_1);
+		
+		JMenuItem SrchCptRegi = new JMenuItem("查询竞赛报名情况");
+		mnNewMenu_1.add(SrchCptRegi);
+		
+		JMenuItem SrchStuAwd = new JMenuItem("查询学生获奖情况");
+		mnNewMenu_1.add(SrchStuAwd);
+		
+		JMenuItem SrchCptAwd = new JMenuItem("查询竞赛获奖情况");
+		mnNewMenu_1.add(SrchCptAwd);
+		
+		JMenuItem CntStuAwd = new JMenuItem("统计学生获奖数量");
+		mnNewMenu_1.add(CntStuAwd);
+		
+		JMenu CntAwdStuInfo = new JMenu("统计获奖学生信息");
+		mnNewMenu_1.add(CntAwdStuInfo);
+		
+		JMenuItem CptBased = new JMenuItem("竞赛基准");
+		CntAwdStuInfo.add(CptBased);
+		
+		JMenuItem TimeProBased = new JMenuItem("时间/专业基准");
+		CntAwdStuInfo.add(TimeProBased);
+		contentPane = new JPanel();
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		contentPane.setLayout(new BorderLayout(0, 0));
+		setContentPane(contentPane);
+		
+		//设置JFrame居中显示
+		this.setLocationRelativeTo(null);
+		
+		//设置最大化
+//		this.setExtendedState(Frame.MAXIMIZED_BOTH);
+	}
+
+}

@@ -1,0 +1,218 @@
+package cn.zucc.edu.view;
+
+import java.awt.EventQueue;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.ResultSet;
+
+import javax.swing.JButton;
+import javax.swing.JInternalFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JTextField;
+
+import cn.zucc.edu.dao.TeamUpDao;
+import cn.zucc.edu.models.BeanTeamUp;
+import cn.zucc.edu.util.DBUtil;
+import cn.zucc.edu.util.StringUtil;
+
+public class StuCptRegiInterFrm extends JInternalFrame {
+	private JTextField textField_1;
+	private JTextField textField_2;
+	private JTextField textField_3;
+	private JTextField textField_4;
+	private JTextField textField_5;
+	
+	DBUtil dbUtil = new DBUtil();
+	TeamUpDao teamUpDao = new TeamUpDao();
+	private JTextField IsLeaderTxt;
+	private JTextField IsPtcptTxt;
+
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					StuCptRegiInterFrm frame = new StuCptRegiInterFrm();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the frame.
+	 */
+	public StuCptRegiInterFrm() {
+		setMaximizable(true);
+		setIconifiable(true);
+		setClosable(true);
+		setTitle("学生竞赛组队");
+		setBounds(100, 100, 1013, 603);
+		getContentPane().setLayout(null);
+		
+		JLabel lblNewLabel = new JLabel("学号");
+		lblNewLabel.setFont(new Font("宋体", Font.BOLD, 27));
+		lblNewLabel.setBounds(98, 77, 120, 32);
+		getContentPane().add(lblNewLabel);
+		
+		textField_1 = new JTextField();
+		textField_1.setColumns(10);
+		textField_1.setBounds(228, 77, 230, 32);
+		getContentPane().add(textField_1);
+		
+		JLabel lblNewLabel_1 = new JLabel("学生姓名");
+		lblNewLabel_1.setFont(new Font("宋体", Font.BOLD, 27));
+		lblNewLabel_1.setBounds(521, 77, 120, 32);
+		getContentPane().add(lblNewLabel_1);
+		
+		textField_2 = new JTextField();
+		textField_2.setColumns(10);
+		textField_2.setBounds(651, 77, 230, 32);
+		getContentPane().add(textField_2);
+		
+		JLabel lblNewLabel_2 = new JLabel("组队编号");
+		lblNewLabel_2.setFont(new Font("宋体", Font.BOLD, 27));
+		lblNewLabel_2.setBounds(98, 144, 120, 32);
+		getContentPane().add(lblNewLabel_2);
+		
+		textField_3 = new JTextField();
+		textField_3.setColumns(10);
+		textField_3.setBounds(228, 144, 230, 32);
+		getContentPane().add(textField_3);
+		
+		JLabel lblNewLabel_3 = new JLabel("组队名称");
+		lblNewLabel_3.setFont(new Font("宋体", Font.BOLD, 27));
+		lblNewLabel_3.setBounds(521, 144, 120, 32);
+		getContentPane().add(lblNewLabel_3);
+		
+		textField_4 = new JTextField();
+		textField_4.setColumns(10);
+		textField_4.setBounds(651, 144, 230, 32);
+		getContentPane().add(textField_4);
+		
+		JLabel lblNewLabel_4 = new JLabel("竞赛编号");
+		lblNewLabel_4.setFont(new Font("宋体", Font.BOLD, 27));
+		lblNewLabel_4.setBounds(98, 214, 120, 32);
+		getContentPane().add(lblNewLabel_4);
+		
+		textField_5 = new JTextField();
+		textField_5.setColumns(10);
+		textField_5.setBounds(228, 214, 230, 32);
+		getContentPane().add(textField_5);
+		
+		JButton btnNewButton = new JButton("添加");
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				CptRegiActionPerformed(e);
+			}
+		});
+		btnNewButton.setFont(new Font("宋体", Font.BOLD, 30));
+		btnNewButton.setBounds(327, 397, 120, 43);
+		getContentPane().add(btnNewButton);
+		
+		JButton btnNewButton_1 = new JButton("重置");
+		btnNewButton_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				resetValueActionPerformed(e);
+			}
+		});
+		btnNewButton_1.setFont(new Font("宋体", Font.BOLD, 30));
+		btnNewButton_1.setBounds(571, 397, 120, 43);
+		getContentPane().add(btnNewButton_1);
+		
+		JLabel lblNewLabel_4_1 = new JLabel("是否是队长");
+		lblNewLabel_4_1.setFont(new Font("宋体", Font.BOLD, 27));
+		lblNewLabel_4_1.setBounds(501, 214, 140, 32);
+		getContentPane().add(lblNewLabel_4_1);
+		
+		IsLeaderTxt = new JTextField();
+		IsLeaderTxt.setColumns(10);
+		IsLeaderTxt.setBounds(651, 214, 230, 32);
+		getContentPane().add(IsLeaderTxt);
+		
+		JLabel lblNewLabel_4_2 = new JLabel("是否同意参赛");
+		lblNewLabel_4_2.setFont(new Font("宋体", Font.BOLD, 27));
+		lblNewLabel_4_2.setBounds(289, 288, 180, 32);
+		getContentPane().add(lblNewLabel_4_2);
+		
+		IsPtcptTxt = new JTextField();
+		IsPtcptTxt.setColumns(10);
+		IsPtcptTxt.setBounds(479, 288, 230, 32);
+		getContentPane().add(IsPtcptTxt);
+
+	}
+	
+	
+	/**
+	 * 添加组队信息
+	 * @param evt
+	 */
+	private void CptRegiActionPerformed(ActionEvent evt){
+
+		String StuId = this.textField_1.getText();
+		String StuName = this.textField_2.getText();
+		String TeamId = this.textField_3.getText();
+		String TeamName = this.textField_4.getText();
+		String cptId = this.textField_5.getText();
+		String IsLeader = this.IsLeaderTxt.getText();
+		String IsPtcpt = this.IsPtcptTxt.getText();
+		
+		if(StringUtil.isEmpty(StuId) || StringUtil.isEmpty(StuName) || StringUtil.isEmpty(TeamId) 
+				|| StringUtil.isEmpty(TeamName) || StringUtil.isEmpty(cptId) || StringUtil.isEmpty(IsLeader) 
+				|| StringUtil.isEmpty(IsPtcpt)){
+			JOptionPane.showMessageDialog(null, "请将报名信息填写完整");
+			return;
+		}
+		BeanTeamUp teamup = new BeanTeamUp(StuId,StuName,TeamId,TeamName,cptId,IsLeader,IsPtcpt);
+		Connection conn = null;
+		try{
+			conn = dbUtil.getConn();
+			int n = teamUpDao.add(conn,teamup);
+			
+//			if(StuId.equals(teamup.getStuId()) && TeamId.equals(teamup.getCptId())) {
+//					JOptionPane.showMessageDialog(null, "请勿重复报名");
+//					return;
+//			}
+//			else if(StuId.equals(teamup.getStuId()) && cptId.equals(teamup.getTeamId())) {
+//					JOptionPane.showMessageDialog(null, "组队信息重复");
+//					return;
+//			}
+			
+			if(n == 1) {
+				JOptionPane.showMessageDialog(null, "组队信息添加成功");
+			}
+			else {
+				JOptionPane.showMessageDialog(null, "组队信息添加失败");
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+			JOptionPane.showMessageDialog(null, "组队信息添加重复");
+			}finally {
+				try {
+					dbUtil.closeConn(conn);
+				}
+				catch(Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	
+	/**
+	 * 重置函数
+	 * @param e
+	 */
+	private void resetValueActionPerformed(ActionEvent e) {
+		this.textField_1.setText("");
+		this.textField_2.setText("");
+		this.textField_3.setText("");
+		this.textField_4.setText("");
+		this.textField_5.setText("");
+	}
+}

@@ -1,0 +1,49 @@
+package cn.zucc.edu.view;
+
+import java.awt.EventQueue;
+
+import javax.swing.JInternalFrame;
+import javax.swing.JButton;
+import java.awt.Font;
+import javax.swing.JScrollPane;
+
+public class AdminCntRwdStuInfoTimeInterFrm extends JInternalFrame {
+
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					AdminCntRwdStuInfoTimeInterFrm frame = new AdminCntRwdStuInfoTimeInterFrm();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the frame.
+	 */
+	public AdminCntRwdStuInfoTimeInterFrm() {
+		setTitle("特定时间获奖学生信息统计");
+		setMaximizable(true);
+		setIconifiable(true);
+		setClosable(true);
+		setBounds(100, 100, 1011, 605);
+		getContentPane().setLayout(null);
+		
+		JButton btnNewButton = new JButton("统计");
+		btnNewButton.setFont(new Font("宋体", Font.BOLD, 24));
+		btnNewButton.setBounds(830, 33, 97, 37);
+		getContentPane().add(btnNewButton);
+		
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBounds(37, 80, 921, 421);
+		getContentPane().add(scrollPane);
+
+	}
+}

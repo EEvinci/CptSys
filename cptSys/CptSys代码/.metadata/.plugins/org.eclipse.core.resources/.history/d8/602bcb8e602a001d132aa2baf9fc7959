@@ -1,0 +1,24 @@
+package cn.zucc.edu.dao;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+
+import cn.zucc.edu.models.BeanTeam;
+
+public class TeamDao {
+
+	public int add(Connection conn, BeanTeam team) throws Exception{
+		String sql = "insert into team values(?,?,?,?,?)";
+		
+		PreparedStatement pstmt = conn.prepareStatement(sql);
+		
+		pstmt.setString(1,team.getTeamId());
+		pstmt.setString(2,team.getTeamName());
+		pstmt.setInt(3,team.getMemNum());
+		pstmt.setString(4,team.getRwdGrade());
+		pstmt.setString(5,team.getIsFinCpt());
+		
+		return pstmt.executeUpdate();
+	}
+	
+}

@@ -1,0 +1,175 @@
+package cn.zucc.edu.view;
+
+import java.awt.EventQueue;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.util.Vector;
+
+import javax.swing.JButton;
+import javax.swing.JInternalFrame;
+import javax.swing.JLabel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.table.DefaultTableModel;
+
+import cn.zucc.edu.dao.StuDao;
+import cn.zucc.edu.models.BeanStuInfo;
+import cn.zucc.edu.util.DBUtil;
+
+public class AdminQueryStuRwdInterFrm extends JInternalFrame {
+	private JTextField StuIdTxt;
+	private JTextField StuNameTxt;
+	private JTextField StuGradeTxt;
+	private JTextField StuProfessTxt;
+	private JTable table;
+
+	private DBUtil dbUtil = new DBUtil();
+	private StuDao stuDao = new StuDao();
+	
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					AdminQueryStuRwdInterFrm frame = new AdminQueryStuRwdInterFrm();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the frame.
+	 */
+	public AdminQueryStuRwdInterFrm() {
+		setMaximizable(true);
+		setIconifiable(true);
+		setClosable(true);
+		setBounds(100, 100, 1004, 605);
+		getContentPane().setLayout(null);
+		
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBounds(35, 96, 921, 421);
+		getContentPane().add(scrollPane);
+		
+		table = new JTable();
+		scrollPane.setViewportView(table);
+		
+		JLabel lblNewLabel = new JLabel("学号");
+		lblNewLabel.setFont(new Font("宋体", Font.BOLD, 23));
+		lblNewLabel.setBounds(47, 32, 54, 27);
+		getContentPane().add(lblNewLabel);
+		
+		StuIdTxt = new JTextField();
+		StuIdTxt.setColumns(10);
+		StuIdTxt.setBounds(109, 27, 111, 34);
+		getContentPane().add(StuIdTxt);
+		
+		JButton btnNewButton = new JButton("查询");
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+			}
+		});
+		btnNewButton.setFont(new Font("宋体", Font.BOLD, 24));
+		btnNewButton.setBounds(842, 27, 97, 37);
+		getContentPane().add(btnNewButton);
+		
+		JLabel lblNewLabel_1 = new JLabel("姓名");
+		lblNewLabel_1.setFont(new Font("宋体", Font.BOLD, 23));
+		lblNewLabel_1.setBounds(245, 30, 54, 27);
+		getContentPane().add(lblNewLabel_1);
+		
+		StuNameTxt = new JTextField();
+		StuNameTxt.setColumns(10);
+		StuNameTxt.setBounds(299, 27, 111, 34);
+		getContentPane().add(StuNameTxt);
+		
+		JLabel lblNewLabel_2 = new JLabel("年级");
+		lblNewLabel_2.setFont(new Font("宋体", Font.BOLD, 23));
+		lblNewLabel_2.setBounds(440, 32, 54, 27);
+		getContentPane().add(lblNewLabel_2);
+		
+		StuGradeTxt = new JTextField();
+		StuGradeTxt.setColumns(10);
+		StuGradeTxt.setBounds(502, 27, 111, 34);
+		getContentPane().add(StuGradeTxt);
+		
+		JLabel lblNewLabel_3 = new JLabel("专业");
+		lblNewLabel_3.setFont(new Font("宋体", Font.BOLD, 23));
+		lblNewLabel_3.setBounds(635, 32, 54, 27);
+		getContentPane().add(lblNewLabel_3);
+		
+		StuProfessTxt = new JTextField();
+		StuProfessTxt.setColumns(10);
+		StuProfessTxt.setBounds(697, 27, 111, 34);
+		getContentPane().add(StuProfessTxt);
+
+	}
+	
+	
+	/**
+	 * 竞赛报名信息查询
+	 * @param e
+	 */
+	private void StuRwdInfoSearchActionPerformed(ActionEvent e) {
+		
+		String StuId = this.StuIdTxt.getText();
+		String Name = this.StuNameTxt.getText();
+		String StuGrade = this.StuGradeTxt.getText();
+		String StuProfess = this.StuProfessTxt.getText();
+		
+		BeanStuInfo stuInfo = new BeanStuInfo();
+		
+		stuInfo.setStuId(StuId);
+		stuInfo.setName(Name);
+		stuInfo.setGrade(StuGrade);
+		stuInfo.setProfess(StuProfess);
+		
+		this.fillTable(stuInfo);
+	}
+	
+	
+	
+	/**
+	 * 竞赛报名信息显示填充表格
+	 * @param cptInfo
+	 */
+	private void fillTable(BeanStuInfo stuInfo) {
+		DefaultTableModel dtm = (DefaultTableModel) table.getModel();
+		dtm.setRowCount(0);
+		Connection conn = null;
+		try {
+			conn = dbUtil.getConn();
+			ResultSet rs = stuDao.queryCptRwd(conn,stuInfo);
+			while(rs.next())
+			{
+				Vector v = new Vector();
+			
+				v.add(rs.getString("CptName"));
+				v.add(rs.getString("CptItemName"));
+				v.add(rs.getString("RwdGrade"));
+				v.add(rs.getString("StuId"));
+				v.add(rs.getString("Name"));
+				v.add(rs.getString("TeamId"));
+				v.add(rs.getString("Profess"));
+				v.add(rs.getString("Grade"));
+				v.add(rs.getString("SClass"));
+
+				dtm.addRow(v);
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+	}
+	
+	
+}

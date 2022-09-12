@@ -1,0 +1,46 @@
+package cn.zucc.edu.util;
+
+import java.sql.*;
+
+public class DBUtil {
+
+    private String jdbcUrl = "jdbc:mysql://localhost:3306/coms?useSSL=false&characterEncoding=UTF-8";
+    private String dbUserName = "root";
+    private String dbPwd = "123456";
+    private String jdbcName = "com.mysql.cj.jdbc.Driver";
+
+    /**
+     * 获取数据库连接
+     * @return
+     * @throws Exception
+     */
+    public Connection getConn() throws Exception{
+        Class.forName(jdbcName);
+        Connection conn = DriverManager.getConnection(jdbcUrl, dbUserName, dbPwd);
+        return conn;
+    }
+    
+    /**
+     * 关闭数据库连接
+     * @param conn
+     * @throws Exception
+     */
+    public void closeConn(Connection conn) throws Exception{
+        if(conn != null){
+            conn.close();
+        }
+    }
+
+    public static void main(String[] args) {
+        DBUtil dbUtil = new DBUtil();
+        try {
+            dbUtil.getConn();
+            System.out.println("数据库连接成功！");            
+        } catch (Exception e) {
+            //TODO: handle exception
+            e.printStackTrace();
+            System.out.println("数据库连接失败");            
+        }
+
+    }
+} 

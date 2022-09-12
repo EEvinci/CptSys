@@ -1,0 +1,143 @@
+package cn.zucc.edu.view;
+
+import java.awt.EventQueue;
+import java.awt.Font;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.util.Vector;
+
+import javax.swing.GroupLayout;
+import javax.swing.GroupLayout.Alignment;
+import javax.swing.JButton;
+import javax.swing.JInternalFrame;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.LayoutStyle.ComponentPlacement;
+import javax.swing.table.DefaultTableModel;
+
+import cn.zucc.edu.dao.CptDao;
+import cn.zucc.edu.models.BeanCptInfo;
+import cn.zucc.edu.util.DBUtil;
+
+public class AdminRUDCptInterFrm extends JInternalFrame {
+	private JTable CptInfoTable;
+
+	private DBUtil dbUtil = new DBUtil();
+	private CptDao cptDao = new CptDao();
+	
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					AdminRUDCptInterFrm frame = new AdminRUDCptInterFrm();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the frame.
+	 */
+	public AdminRUDCptInterFrm() {
+		setTitle("查询/修改/删除竞赛信息");
+		setToolTipText("");
+		setClosable(true);
+		setMaximizable(true);
+		setBounds(100, 100, 995, 560);
+		
+		JScrollPane scrollPane = new JScrollPane();
+		
+		JButton btnNewButton = new JButton("查询");
+		btnNewButton.setFont(new Font("宋体", Font.BOLD, 20));
+		
+		JButton btnNewButton_1 = new JButton("修改");
+		btnNewButton_1.setFont(new Font("宋体", Font.BOLD, 20));
+		
+		JButton btnNewButton_2 = new JButton("删除");
+		btnNewButton_2.setFont(new Font("宋体", Font.BOLD, 20));
+		GroupLayout groupLayout = new GroupLayout(getContentPane());
+		groupLayout.setHorizontalGroup(
+			groupLayout.createParallelGroup(Alignment.LEADING)
+				.addGroup(groupLayout.createSequentialGroup()
+					.addGap(127)
+					.addComponent(btnNewButton_2, GroupLayout.PREFERRED_SIZE, 97, GroupLayout.PREFERRED_SIZE)
+					.addGap(85)
+					.addComponent(btnNewButton_1, GroupLayout.PREFERRED_SIZE, 97, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED, 309, Short.MAX_VALUE)
+					.addComponent(btnNewButton, GroupLayout.PREFERRED_SIZE, 97, GroupLayout.PREFERRED_SIZE)
+					.addGap(171))
+				.addGroup(groupLayout.createSequentialGroup()
+					.addGap(23)
+					.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 936, Short.MAX_VALUE)
+					.addGap(24))
+		);
+		groupLayout.setVerticalGroup(
+			groupLayout.createParallelGroup(Alignment.LEADING)
+				.addGroup(groupLayout.createSequentialGroup()
+					.addGap(10)
+					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+						.addComponent(btnNewButton)
+						.addComponent(btnNewButton_2)
+						.addComponent(btnNewButton_1))
+					.addGap(18)
+					.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 371, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap(106, Short.MAX_VALUE))
+		);
+		
+		CptInfoTable = new JTable();
+		CptInfoTable.setModel(new DefaultTableModel(
+			new Object[][] {
+			},
+			new String[] {
+				"\u7ADE\u8D5B\u7F16\u53F7", "\u8D5B\u9879\u7F16\u53F7", "\u7ADE\u8D5B\u540D\u79F0", "\u4E3E\u529E\u671F\u5C4A", "\u4E3E\u529E\u5E74\u4EFD", "\u4E3E\u529E\u65F6\u95F4", "\u62A5\u540D\u5F00\u59CB\u65F6\u95F4", "\u62A5\u540D\u7ED3\u675F\u65F6\u95F4", "\u8054\u7CFB\u8001\u5E08", "\u7ADE\u8D5B\u5B98\u7F51"
+			}
+		));
+		CptInfoTable.getColumnModel().getColumn(6).setPreferredWidth(97);
+		CptInfoTable.getColumnModel().getColumn(7).setPreferredWidth(93);
+		scrollPane.setViewportView(CptInfoTable);
+		getContentPane().setLayout(groupLayout);
+		
+		this.fillTable(new BeanCptInfo());
+
+	}
+	
+	private void fillTable(BeanCptInfo cptInfo) {
+		DefaultTableModel dtm = (DefaultTableModel) CptInfoTable.getModel();
+		dtm.setRowCount(0);
+		Connection conn = null;
+		try {
+			conn = dbUtil.getConn();
+			ResultSet rs = cptDao.list(conn,cptInfo);
+			while(rs.next())
+			{
+				Vector v = new Vector();
+				v.add(rs.getString("CptId"));
+				v.add(rs.getString("CptItemId"));
+				v.add(rs.getString("CptName"));
+				v.add(rs.getString("CptYear"));
+				v.add(rs.getString("HoldYear"));
+				v.add(rs.getString("CptItemId"));
+				v.add(rs.getString("RegiStart"));
+				v.add(rs.getString("RegiEnd"));
+				v.add(rs.getString("Contact"));
+				v.add(rs.getString("Web"));
+				dtm.addRow(v);
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}finally {
+			try {
+				dbUtil.closeConn(conn);
+			}catch(Exception e)
+			{
+				e.printStackTrace();
+			}
+		}
+	}
+}

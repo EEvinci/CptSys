@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<qualifiedTypeNameHistroy>
+    <fullyQualifiedTypeName name="cn.zucc.edu.models.BeanUserLog"/>
+    <fullyQualifiedTypeName name="cn.zucc.edu.models.BeanStuInfo"/>
+    <fullyQualifiedTypeName name="cn.zucc.edu.models.BeanRegister"/>
+    <fullyQualifiedTypeName name="cn.zucc.edu.models.BeanAdminInfo"/>
+    <fullyQualifiedTypeName name="cn.zucc.edu.view.Ad_CptItemAddInterFrm"/>
+    <fullyQualifiedTypeName name="cn.zucc.edu.dao.CptItemDao"/>
+    <fullyQualifiedTypeName name="java.sql.PreparedStatement"/>
+    <fullyQualifiedTypeName name="cn.zucc.edu.models.BeanCptItemInfo"/>
+    <fullyQualifiedTypeName name="cn.zucc.edu.util.StringUtil"/>
+    <fullyQualifiedTypeName name="javax.swing.JOptionPane"/>
+    <fullyQualifiedTypeName name="cn.zucc.edu.dao.ChangePwdDao"/>
+    <fullyQualifiedTypeName name="java.sql.Connection"/>
+    <fullyQualifiedTypeName name="cn.zucc.edu.util.DbException"/>
+    <fullyQualifiedTypeName name="java.sql.SQLException"/>
+    <fullyQualifiedTypeName name="cn.zucc.edu.dao.TeamDao"/>
+    <fullyQualifiedTypeName name="java.lang.Integer"/>
+    <fullyQualifiedTypeName name="java.util.Date"/>
+    <fullyQualifiedTypeName name="java.lang.StringIndexOutOfBoundsException"/>
+    <fullyQualifiedTypeName name="cn.zucc.edu.models.BeanCptInfo"/>
+    <fullyQualifiedTypeName name="cn.zucc.edu.dao.PlayerDao"/>
+</qualifiedTypeNameHistroy>

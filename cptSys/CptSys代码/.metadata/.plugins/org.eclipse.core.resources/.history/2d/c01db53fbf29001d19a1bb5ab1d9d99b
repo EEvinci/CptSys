@@ -1,0 +1,51 @@
+package cn.zucc.edu.view;
+
+import java.awt.EventQueue;
+
+import javax.swing.JInternalFrame;
+import javax.swing.JLabel;
+
+public class AdminRUDCptInterFrm extends JInternalFrame {
+
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					AdminRUDCptInterFrm frame = new AdminRUDCptInterFrm();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the frame.
+	 */
+	public AdminRUDCptInterFrm() {
+		setTitle("查询/修改/删除竞赛信息");
+		setToolTipText("");
+		setClosable(true);
+		setMaximizable(true);
+		setBounds(100, 100, 657, 540);
+		getContentPane().setLayout(null);
+		
+		JLabel lblNewLabel = new JLabel("查询");
+		lblNewLabel.setBounds(343, 10, 58, 15);
+		getContentPane().add(lblNewLabel);
+		
+		JLabel lblNewLabel_1 = new JLabel("删除");
+		lblNewLabel_1.setBounds(90, 10, 58, 15);
+		getContentPane().add(lblNewLabel_1);
+		
+		JLabel lblNewLabel_2 = new JLabel("New label");
+		lblNewLabel_2.setBounds(158, 10, 58, 15);
+		getContentPane().add(lblNewLabel_2);
+
+	}
+
+}

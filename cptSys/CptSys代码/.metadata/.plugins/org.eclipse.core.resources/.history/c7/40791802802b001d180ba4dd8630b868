@@ -1,0 +1,117 @@
+package cn.zucc.edu.view;
+
+import java.awt.EventQueue;
+
+import javax.swing.JInternalFrame;
+import javax.swing.GroupLayout;
+import javax.swing.GroupLayout.Alignment;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.JButton;
+import java.awt.Font;
+import javax.swing.JLabel;
+import javax.swing.JTextField;
+
+public class AdminRUDCptItemInterFrm extends JInternalFrame {
+	private JTable table;
+	private JTextField CptItemTxt;
+
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					AdminRUDCptItemInterFrm frame = new AdminRUDCptItemInterFrm();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the frame.
+	 */
+	public AdminRUDCptItemInterFrm() {
+		setBounds(100, 100, 1017, 600);
+		
+		JScrollPane scrollPane = new JScrollPane();
+		
+		JButton Delete = new JButton("删除");
+		Delete.setFont(new Font("宋体", Font.BOLD, 20));
+		
+		JButton Modify = new JButton("修改");
+		Modify.setFont(new Font("宋体", Font.BOLD, 20));
+		
+		JLabel lblNewLabel = new JLabel("赛项编号");
+		lblNewLabel.setFont(new Font("宋体", Font.BOLD, 20));
+		
+		CptItemTxt = new JTextField();
+		CptItemTxt.setColumns(10);
+		
+		JButton Query = new JButton("查询");
+		Query.setFont(new Font("宋体", Font.BOLD, 20));
+		GroupLayout groupLayout = new GroupLayout(getContentPane());
+		groupLayout.setHorizontalGroup(
+			groupLayout.createParallelGroup(Alignment.LEADING)
+				.addGroup(groupLayout.createSequentialGroup()
+					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+						.addGroup(groupLayout.createSequentialGroup()
+							.addGap(118)
+							.addComponent(Delete, GroupLayout.PREFERRED_SIZE, 97, GroupLayout.PREFERRED_SIZE)
+							.addGap(39)
+							.addComponent(Modify, GroupLayout.PREFERRED_SIZE, 97, GroupLayout.PREFERRED_SIZE)
+							.addGap(95)
+							.addComponent(lblNewLabel, GroupLayout.PREFERRED_SIZE, 84, GroupLayout.PREFERRED_SIZE)
+							.addGap(10)
+							.addComponent(CptItemTxt, GroupLayout.PREFERRED_SIZE, 197, GroupLayout.PREFERRED_SIZE)
+							.addGap(41)
+							.addComponent(Query, GroupLayout.PREFERRED_SIZE, 97, GroupLayout.PREFERRED_SIZE))
+						.addGroup(groupLayout.createSequentialGroup()
+							.addGap(47)
+							.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 910, GroupLayout.PREFERRED_SIZE)))
+					.addContainerGap(44, Short.MAX_VALUE))
+		);
+		groupLayout.setVerticalGroup(
+			groupLayout.createParallelGroup(Alignment.LEADING)
+				.addGroup(groupLayout.createSequentialGroup()
+					.addGap(18)
+					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+						.addComponent(Delete, GroupLayout.PREFERRED_SIZE, 33, GroupLayout.PREFERRED_SIZE)
+						.addComponent(Modify, GroupLayout.PREFERRED_SIZE, 33, GroupLayout.PREFERRED_SIZE)
+						.addGroup(groupLayout.createSequentialGroup()
+							.addGap(9)
+							.addComponent(lblNewLabel, GroupLayout.PREFERRED_SIZE, 24, GroupLayout.PREFERRED_SIZE))
+						.addGroup(groupLayout.createSequentialGroup()
+							.addGap(4)
+							.addComponent(CptItemTxt, GroupLayout.PREFERRED_SIZE, 29, GroupLayout.PREFERRED_SIZE))
+						.addComponent(Query, GroupLayout.PREFERRED_SIZE, 33, GroupLayout.PREFERRED_SIZE))
+					.addGap(26)
+					.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 381, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap(112, Short.MAX_VALUE))
+		);
+		
+		table = new JTable();
+		table.setModel(new DefaultTableModel(
+			new Object[][] {
+			},
+			new String[] {
+				"\u8D5B\u9879\u7F16\u53F7", "\u8D5B\u9879\u540D\u79F0", "\u8D1F\u8D23\u8001\u5E08", "\u6240\u5C5E\u5B66\u9662", "\u8D5B\u9879\u7B49\u7EA7"
+			}
+		) {
+			boolean[] columnEditables = new boolean[] {
+				false, false, false, false, false
+			};
+			public boolean isCellEditable(int row, int column) {
+				return columnEditables[column];
+			}
+		});
+		scrollPane.setViewportView(table);
+		getContentPane().setLayout(groupLayout);
+
+	}
+}

@@ -1,0 +1,110 @@
+package cn.zucc.edu.view;
+
+import java.awt.EventQueue;
+
+import javax.swing.JInternalFrame;
+import javax.swing.JLabel;
+import java.awt.Font;
+import javax.swing.JTextField;
+import javax.swing.JButton;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+
+public class StuCptRegiInterFrm extends JInternalFrame {
+	private JTextField teamIdtxt;
+	private JTextField CptIdTxt;
+	private JTextField RegiTimeTxt;
+	private JTextField RegiStatusTxt;
+
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					StuCptRegiInterFrm frame = new StuCptRegiInterFrm();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the frame.
+	 */
+	public StuCptRegiInterFrm() {
+		setClosable(true);
+		setMaximizable(true);
+		setIconifiable(true);
+		getContentPane().setFont(new Font("宋体", Font.BOLD, 20));
+		setTitle("填写报名信息");
+		setBounds(100, 100, 595, 413);
+		getContentPane().setLayout(null);
+		
+		JLabel lblNewLabel = new JLabel("队伍编号");
+		lblNewLabel.setFont(new Font("宋体", Font.BOLD, 20));
+		lblNewLabel.setBounds(141, 59, 83, 24);
+		getContentPane().add(lblNewLabel);
+		
+		JLabel lblNewLabel_1 = new JLabel("竞赛编号");
+		lblNewLabel_1.setFont(new Font("宋体", Font.BOLD, 20));
+		lblNewLabel_1.setBounds(140, 104, 84, 27);
+		getContentPane().add(lblNewLabel_1);
+		
+		JLabel lblNewLabel_1_1 = new JLabel("报名时间");
+		lblNewLabel_1_1.setFont(new Font("宋体", Font.BOLD, 20));
+		lblNewLabel_1_1.setBounds(140, 158, 84, 27);
+		getContentPane().add(lblNewLabel_1_1);
+		
+		JLabel lblNewLabel_1_2 = new JLabel("报名状态");
+		lblNewLabel_1_2.setFont(new Font("宋体", Font.BOLD, 20));
+		lblNewLabel_1_2.setBounds(141, 208, 84, 27);
+		getContentPane().add(lblNewLabel_1_2);
+		
+		teamIdtxt = new JTextField();
+		teamIdtxt.setBounds(253, 63, 167, 21);
+		getContentPane().add(teamIdtxt);
+		teamIdtxt.setColumns(10);
+		
+		CptIdTxt = new JTextField();
+		CptIdTxt.setColumns(10);
+		CptIdTxt.setBounds(253, 104, 167, 21);
+		getContentPane().add(CptIdTxt);
+		
+		RegiTimeTxt = new JTextField();
+		RegiTimeTxt.setColumns(10);
+		RegiTimeTxt.setBounds(253, 163, 167, 21);
+		getContentPane().add(RegiTimeTxt);
+		
+		RegiStatusTxt = new JTextField();
+		RegiStatusTxt.setColumns(10);
+		RegiStatusTxt.setBounds(253, 213, 167, 21);
+		getContentPane().add(RegiStatusTxt);
+		
+		JButton confirm = new JButton("确认报名");
+		confirm.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				StuRegiActionPerformed(e);
+			}
+		});
+		confirm.setFont(new Font("宋体", Font.BOLD, 20));
+		confirm.setBounds(114, 278, 125, 33);
+		getContentPane().add(confirm);
+		
+		JButton reset = new JButton("重置");
+		reset.setFont(new Font("宋体", Font.BOLD, 20));
+		reset.setBounds(313, 278, 125, 33);
+		getContentPane().add(reset);
+
+	}
+
+	private void StuRegiActionPerformed(ActionEvent e) {
+		
+	}
+	
+	
+	
+}

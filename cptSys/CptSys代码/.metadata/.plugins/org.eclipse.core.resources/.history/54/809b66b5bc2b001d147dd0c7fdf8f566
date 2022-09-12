@@ -1,0 +1,189 @@
+package cn.zucc.edu.view;
+
+import java.awt.EventQueue;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.util.Vector;
+
+import javax.swing.GroupLayout;
+import javax.swing.GroupLayout.Alignment;
+import javax.swing.JButton;
+import javax.swing.JInternalFrame;
+import javax.swing.JLabel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.table.DefaultTableModel;
+
+import cn.zucc.edu.dao.TeamDao;
+import cn.zucc.edu.models.BeanCptInfo;
+import cn.zucc.edu.models.BeanTeam;
+import cn.zucc.edu.util.DBUtil;
+
+public class AdminRUDTeamInterFrm extends JInternalFrame {
+	private JTextField teamTxt;
+	private JTable teamTable;
+	
+	private DBUtil dbUtil = new DBUtil();
+	private TeamDao teamDao = new TeamDao();
+
+	
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					AdminRUDTeamInterFrm frame = new AdminRUDTeamInterFrm();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the frame.
+	 */
+	public AdminRUDTeamInterFrm() {
+		setClosable(true);
+		setMaximizable(true);
+		setIconifiable(true);
+		setBounds(100, 100, 1001, 598);
+		
+		JButton Delete = new JButton("删除");
+		Delete.setFont(new Font("宋体", Font.BOLD, 20));
+		
+		JButton Modify = new JButton("修改");
+		Modify.setFont(new Font("宋体", Font.BOLD, 20));
+		
+		JLabel lblNewLabel = new JLabel("队伍编号");
+		lblNewLabel.setFont(new Font("宋体", Font.BOLD, 20));
+		
+		teamTxt = new JTextField();
+		teamTxt.setColumns(10);
+		
+		JButton Query = new JButton("查询");
+		Query.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				TeamInfoSearchActionPerformed(e);
+			}
+		});
+		Query.setFont(new Font("宋体", Font.BOLD, 20));
+		
+		JScrollPane scrollPane = new JScrollPane();
+		GroupLayout groupLayout = new GroupLayout(getContentPane());
+		groupLayout.setHorizontalGroup(
+			groupLayout.createParallelGroup(Alignment.LEADING)
+				.addGroup(groupLayout.createSequentialGroup()
+					.addGap(37)
+					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+						.addGroup(groupLayout.createSequentialGroup()
+							.addGap(71)
+							.addComponent(Delete, GroupLayout.PREFERRED_SIZE, 97, GroupLayout.PREFERRED_SIZE)
+							.addGap(39)
+							.addComponent(Modify, GroupLayout.PREFERRED_SIZE, 97, GroupLayout.PREFERRED_SIZE)
+							.addGap(96)
+							.addComponent(lblNewLabel)
+							.addGap(10)
+							.addComponent(teamTxt, GroupLayout.PREFERRED_SIZE, 197, GroupLayout.PREFERRED_SIZE)
+							.addGap(41)
+							.addComponent(Query, GroupLayout.PREFERRED_SIZE, 97, GroupLayout.PREFERRED_SIZE))
+						.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 910, GroupLayout.PREFERRED_SIZE))
+					.addContainerGap(38, Short.MAX_VALUE))
+		);
+		groupLayout.setVerticalGroup(
+			groupLayout.createParallelGroup(Alignment.LEADING)
+				.addGroup(groupLayout.createSequentialGroup()
+					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+						.addGroup(groupLayout.createSequentialGroup()
+							.addGap(26)
+							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+								.addComponent(Delete, GroupLayout.PREFERRED_SIZE, 33, GroupLayout.PREFERRED_SIZE)
+								.addComponent(Modify, GroupLayout.PREFERRED_SIZE, 33, GroupLayout.PREFERRED_SIZE)
+								.addGroup(groupLayout.createSequentialGroup()
+									.addGap(4)
+									.addComponent(teamTxt, GroupLayout.PREFERRED_SIZE, 29, GroupLayout.PREFERRED_SIZE))
+								.addComponent(Query, GroupLayout.PREFERRED_SIZE, 33, GroupLayout.PREFERRED_SIZE)))
+						.addGroup(groupLayout.createSequentialGroup()
+							.addGap(35)
+							.addComponent(lblNewLabel, GroupLayout.PREFERRED_SIZE, 24, GroupLayout.PREFERRED_SIZE)))
+					.addGap(26)
+					.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 381, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap(102, Short.MAX_VALUE))
+		);
+		
+		teamTable = new JTable();
+		teamTable.setModel(new DefaultTableModel(
+			new Object[][] {
+			},
+			new String[] {
+				"\u961F\u4F0D\u7F16\u53F7", "\u961F\u4F0D\u540D\u79F0", "\u961F\u4F0D\u4EBA\u6570", "\u83B7\u5956\u7B49\u7EA7", "\u662F\u5426\u5B8C\u8D5B"
+			}
+		) {
+			boolean[] columnEditables = new boolean[] {
+				false, false, false, false, false
+			};
+			public boolean isCellEditable(int row, int column) {
+				return columnEditables[column];
+			}
+		});
+		scrollPane.setViewportView(teamTable);
+		getContentPane().setLayout(groupLayout);
+		
+		this.fillTable(new BeanTeam());//将表中的信息传入到表格中
+
+	}
+
+	/**
+	 * 队伍信息查询
+	 * @param e
+	 */
+	private void TeamInfoSearchActionPerformed(ActionEvent e) {
+		
+		String c_team = this.teamTxt.getText();
+		BeanTeam team = new BeanTeam();
+		team.setTeamId(c_team);
+		this.fillTable(team);
+	}
+	
+	/**
+	 * 队伍信息填充表格
+	 * @param teamInfo
+	 */
+	private void fillTable(BeanTeam teamInfo) {
+		DefaultTableModel dtm = (DefaultTableModel) teamTable.getModel();
+		dtm.setRowCount(0);
+		Connection conn = null;
+		try {
+			conn = dbUtil.getConn();
+			ResultSet rs = teamDao.query(conn,teamInfo);
+			while(rs.next())
+			{
+				Vector v = new Vector();
+				
+				v.add(rs.getString("TeamId"));
+				v.add(rs.getString("TeamName"));
+				v.add(rs.getString("MemNum"));
+				v.add(rs.getString("RwdGrade"));
+				v.add(rs.getString("IsFinCpt"));
+
+				dtm.addRow(v);
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}finally {
+			try {
+				dbUtil.closeConn(conn);
+			}catch(Exception e)
+			{
+				e.printStackTrace();
+			}
+		}
+	}
+}

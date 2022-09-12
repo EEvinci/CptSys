@@ -1,0 +1,44 @@
+package cn.zucc.edu.dao;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+
+import cn.zucc.edu.models.BeanRegister;
+
+/**
+ * 报名信息管理
+ * @author PC
+ *
+ */
+public class RegiDao {
+	
+	/**
+	 * 添加报名信息
+	 * @param conn
+	 * @param regi
+	 * @return
+	 */
+	public int add(Connection conn, BeanRegister regi) throws Exception{
+		int n  = 0;
+		String sql = "insert into register values(?,?,?,?)";
+		
+		try {
+			PreparedStatement pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setString(1,regi.getTeamId());
+			pstmt.setString(2,regi.getCptId());
+			pstmt.setString(3,regi.getRegiTime());
+			pstmt.setString(4, regi.getRegiStatus());
+			
+			n = pstmt.executeUpdate();
+			
+			return n;
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		return n;
+		
+	}
+	
+	
+}

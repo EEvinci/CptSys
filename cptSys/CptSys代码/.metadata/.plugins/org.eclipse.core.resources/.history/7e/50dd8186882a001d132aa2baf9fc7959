@@ -1,0 +1,168 @@
+package cn.zucc.edu.view;
+
+import java.awt.Color;
+import java.awt.EventQueue;
+import java.awt.Font;
+
+import javax.swing.GroupLayout;
+import javax.swing.GroupLayout.Alignment;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+import javax.swing.JTextField;
+import javax.swing.LayoutStyle.ComponentPlacement;
+import javax.swing.border.EmptyBorder;
+
+import cn.zucc.edu.dao.AdminLogDao;
+import cn.zucc.edu.models.BeanAdminInfo;
+import cn.zucc.edu.models.BeanStuInfo;
+import cn.zucc.edu.util.DBUtil;
+import cn.zucc.edu.util.StringUtil;
+
+import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.awt.event.ActionEvent;
+
+public class AdminLogOnFrm extends JFrame {
+
+	private JPanel Reset_1;
+	private JPasswordField AdminPasswordTxt;
+	private DBUtil dbUtil = new DBUtil();
+	private AdminLogDao adminDao = new AdminLogDao();
+	private JPasswordField passwordField;
+	
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					AdminLogOnFrm frame = new AdminLogOnFrm();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the frame.
+	 */
+	public AdminLogOnFrm() {
+		setResizable(false);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 523, 350);
+		Reset_1 = new JPanel();
+		Reset_1.setBorder(new EmptyBorder(5, 5, 5, 5));
+		setContentPane(Reset_1);
+		
+		JLabel lblNewLabel = new JLabel("管理员登录");
+		lblNewLabel.setBounds(161, 10, 216, 73);
+		lblNewLabel.setFont(new Font("宋体", Font.BOLD, 35));
+		
+		JLabel lblNewLabel_1 = new JLabel("用户名");
+		lblNewLabel_1.setBounds(94, 114, 78, 33);
+		lblNewLabel_1.setFont(new Font("宋体", Font.BOLD, 20));
+		
+		JLabel lblNewLabel_2 = new JLabel("密  码");
+		lblNewLabel_2.setBounds(94, 157, 78, 33);
+		lblNewLabel_2.setFont(new Font("宋体", Font.BOLD, 20));
+		
+		AdminPasswordTxt = new JPasswordField();
+		AdminPasswordTxt.setBounds(190, 157, 224, 24);
+		
+		JButton Login = new JButton("登录");
+		Login.setBounds(81, 251, 97, 33);
+		Login.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				loginActionPerformed(e);
+			}
+		});
+		Login.setFont(new Font("宋体", Font.BOLD, 20));
+		Login.setBackground(Color.GRAY);
+		
+		JButton Reset = new JButton("重置");
+		Reset.setBounds(221, 251, 97, 33);
+		Reset.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				resetValueActionPerformed(e);
+			}
+		});
+		Reset.setFont(new Font("宋体", Font.BOLD, 20));
+		Reset.setBackground(Color.GRAY);
+		Reset.setForeground(Color.BLACK);
+		Reset_1.setLayout(null);
+		
+		JButton Reset_2 = new JButton("退出");
+		Reset_2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				StuLogOnFrm_1 stuLog = new StuLogOnFrm_1();
+				stuLog.setVisible(true);
+				JOptionPane.showConfirmDialog(null, "即将返回学生登陆界面");
+				dispose();
+			}
+		});
+		Reset_2.setBounds(371, 251, 97, 33);
+		Reset_2.setForeground(Color.BLACK);
+		Reset_2.setFont(new Font("宋体", Font.BOLD, 20));
+		Reset_2.setBackground(Color.GRAY);
+		Reset_1.add(Reset_2);
+		Reset_1.add(lblNewLabel_1);
+		Reset_1.add(lblNewLabel_2);
+		Reset_1.add(AdminPasswordTxt);
+		Reset_1.add(lblNewLabel);
+		Reset_1.add(Login);
+		Reset_1.add(Reset);
+		
+		passwordField = new JPasswordField();
+		passwordField.setBounds(190, 118, 224, 24);
+		Reset_1.add(passwordField);
+		
+		//设置JFrame居中显示
+		this.setLocationRelativeTo(null);
+	}
+
+	private void loginActionPerformed(ActionEvent e) {
+		// TODO 自动生成的方法存根
+		String AdminID = this.AdminNameTxt.getText();
+		String Password = this.AdminPasswordTxt.getText();
+		if(StringUtil.isEmpty(AdminID)) {
+			JOptionPane.showMessageDialog(null, "用户名不能为空！");
+			return;
+		}
+		if(StringUtil.isEmpty(Password))
+		{
+			JOptionPane.showMessageDialog(null, "密码不能为空");
+			return;
+		}
+		BeanAdminInfo stu = new BeanAdminInfo(AdminID,Password);//创建admin对象接收传入的用户名和密码
+		Connection conn = null;
+		try {
+			conn = dbUtil.getConn();
+			BeanAdminInfo currentAdmin = AdminLogDao.login(conn, stu);//用admin中的信息和数据库中的用户信息做比照,匹配则会传入信息到currentStu
+			if(currentAdmin != null) {
+				dispose();
+				new AdminMainFrm().setVisible(true);
+			}
+			else
+				JOptionPane.showConfirmDialog(null, "用户名或密码错误!");
+		} catch (Exception e1) {
+			// TODO 自动生成的 catch 块
+			e1.printStackTrace();
+		}
+	}
+
+	/**
+	 * reset the value of passwordTxt and UserIDTxt 
+	 * @param e
+	 */
+	private void resetValueActionPerformed(ActionEvent evt) {
+		this.AdminNameTxt.setText("");
+		this.AdminPasswordTxt.setText("");
+	}
+}

@@ -1,0 +1,34 @@
+package cn.zucc.edu.dao;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+
+import cn.zucc.edu.models.BeanCptItemInfo;
+
+/**
+ * 赛项Dao类
+ * @author PC
+ *
+ */
+public class CptItemDao {
+
+/**
+ * 赛项添加
+ * @param conn
+ * @param cptItemInfo
+ * @return
+ * @throws Excetions
+ */
+	public int add(Connection conn, BeanCptItemInfo cptItemInfo) throws Exception{
+		String sql = "insert into cptiteminfo values(null,?,?,?,?)";
+		
+		PreparedStatement pstmt = conn.prepareStatement(sql);
+		
+		pstmt.setString(1, cptItemInfo.getCptItemName());
+		pstmt.setString(2, cptItemInfo.getResPerson());
+		pstmt.setString(3, cptItemInfo.getBelongCol());
+		pstmt.setString(4, cptItemInfo.getCptLevel());
+	
+		return pstmt.executeUpdate();
+	}
+}
