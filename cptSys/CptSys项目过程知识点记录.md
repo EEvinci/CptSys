@@ -2,15 +2,15 @@
 
 - `model`包`User`表属性定义
 
-  ![image-20220829103322359](E:\Typora\ty_Photo\image-20220829103322359.png)
+  ![image-20220829103322359](http://evinci.oss-cn-hangzhou.aliyuncs.com/evinci/image-20220829103322359.png)
 
 - `Dao`包`UserDao`依据用户名和密码`查询用户` 登录信息管理
 
-  ![image-20220829103201782](E:\Typora\ty_Photo\image-20220829103201782.png)
+  ![image-20220829103201782](http://evinci.oss-cn-hangzhou.aliyuncs.com/evinci/image-20220829103201782.png)
 
 - `view`包`LogOnFrm`登录`验证用户名密码匹配`功能设计
 
-  ![image-20220829102244143](E:\Typora\ty_Photo\image-20220829102244143.png)
+  ![image-20220829102244143](http://evinci.oss-cn-hangzhou.aliyuncs.com/evinci/image-20220829102244143.png)
 
 
 
@@ -120,7 +120,7 @@ java命名习惯：
 
 **疑问1：**
 
-![image-20220906215104206](E:\Typora\ty_Photo\image-20220906215104206.png)
+![image-20220906215104206](http://evinci.oss-cn-hangzhou.aliyuncs.com/evinci/image-20220906215104206.png)
 
 像这种要删除主键，但是外键存在的情况，是否可以用catch捕捉到的异常作为另一种情况的判断
 

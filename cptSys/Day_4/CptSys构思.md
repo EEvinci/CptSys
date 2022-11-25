@@ -2,13 +2,13 @@
 
 **具体要求如下：**
 
-![image-20220828094757016](E:\Typora\ty_Photo\image-20220828094757016.png)
+![image-20220828094757016](http://evinci.oss-cn-hangzhou.aliyuncs.com/evinci/image-20220828094757016.png)
 
-![image-20220828094812972](E:\Typora\ty_Photo\image-20220828094812972.png)
+![image-20220828094812972](http://evinci.oss-cn-hangzhou.aliyuncs.com/evinci/image-20220828094812972.png)
 
 现设计出的不完善的概念模型为：
 
-![image-20220828094840261](E:\Typora\ty_Photo\image-20220828094840261.png)
+![image-20220828094840261](http://evinci.oss-cn-hangzhou.aliyuncs.com/evinci/image-20220828094840261.png)
 
 现主要问题是表间关系的设计，由设计要求理解的表之间的关系对应准则如下：
 
@@ -49,11 +49,11 @@
 
 完善后的 **CompetitionSystem概念模型**
 
-![Competition概念模型](E:\Typora\ty_Photo\image-20220828114605803.png)
+![Competition概念模型](http://evinci.oss-cn-hangzhou.aliyuncs.com/evinci/image-20220828114605803.png)
 
 完善后的 **CompetitionSystem物理模型**
 
-![image-20220828115654972](E:\Typora\ty_Photo\image-20220828115654972.png)
+![image-20220828115654972](http://evinci.oss-cn-hangzhou.aliyuncs.com/evinci/image-20220828115654972.png)
 
 
 
@@ -151,7 +151,7 @@
 
    **管理员的权限**如下:
 
-   ![image-20220829142307144](E:\Typora\ty_Photo\image-20220829142307144.png)
+   ![image-20220829142307144](http://evinci.oss-cn-hangzhou.aliyuncs.com/evinci/image-20220829142307144.png)
 
    **预想页面:**
 

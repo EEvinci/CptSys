@@ -2,13 +2,13 @@
 
 **具体要求如下：**
 
-![image-20220828094757016](E:\Typora\ty_Photo\image-20220828094757016.png)
+![image-20220828094757016](http://evinci.oss-cn-hangzhou.aliyuncs.com/evinci/image-20220828094757016.png)
 
-![image-20220828094812972](E:\Typora\ty_Photo\image-20220828094812972.png)
+![image-20220828094812972](http://evinci.oss-cn-hangzhou.aliyuncs.com/evinci/image-20220828094812972.png)
 
 现设计出的不完善的概念模型为：
 
-![image-20220828094840261](E:\Typora\ty_Photo\image-20220828094840261.png)
+![image-20220828094840261](http://evinci.oss-cn-hangzhou.aliyuncs.com/evinci/image-20220828094840261.png)
 
 现主要问题是表间关系的设计，由设计要求理解的表之间的关系对应准则如下：
 
@@ -49,11 +49,11 @@
 
 完善后的 **CompetitionSystem概念模型**
 
-![Competition概念模型](E:\Typora\ty_Photo\image-20220828114605803.png)
+![Competition概念模型](http://evinci.oss-cn-hangzhou.aliyuncs.com/evinci/image-20220828114605803.png)
 
 完善后的 **CompetitionSystem物理模型**
 
-![image-20220828115654972](E:\Typora\ty_Photo\image-20220828115654972.png)
+![image-20220828115654972](http://evinci.oss-cn-hangzhou.aliyuncs.com/evinci/image-20220828115654972.png)
 
 
 
@@ -151,7 +151,7 @@
 
    **管理员的权限**如下:
 
-   ![image-20220829142307144](E:\Typora\ty_Photo\image-20220829142307144.png)
+   ![image-20220829142307144](http://evinci.oss-cn-hangzhou.aliyuncs.com/evinci/image-20220829142307144.png)
 
    **预想页面:**
 
@@ -183,11 +183,11 @@
    
    采用该种想法: 
    
-   ![image-20220830115126005](E:\Typora\ty_Photo\image-20220830115126005.png)
+   ![image-20220830115126005](http://evinci.oss-cn-hangzhou.aliyuncs.com/evinci/image-20220830115126005.png)
    
    **即`学生登陆界面`作为`主界面`, 在主界面中添加`管理员登陆选项`, 用户可以依照自己身份进行选择**
    
-   ![image-20220830115359098](E:\Typora\ty_Photo\image-20220830115359098.png)
+   ![image-20220830115359098](http://evinci.oss-cn-hangzhou.aliyuncs.com/evinci/image-20220830115359098.png)
    
    
    
@@ -197,15 +197,15 @@
    
    - 一个是`组队报名`, 其中包括`竞赛组队` 和 `竞赛报名`
    
-   ![image-20220830134416421](E:\Typora\ty_Photo\image-20220830134416421.png)
+   ![image-20220830134416421](http://evinci.oss-cn-hangzhou.aliyuncs.com/evinci/image-20220830134416421.png)
    
    - 一个是`查询统计`, 其中包括`竞赛信息查询` `获奖信息查询` `竞赛信息统计` 
    
-   ![image-20220830134542633](E:\Typora\ty_Photo\image-20220830134542633.png)
+   ![image-20220830134542633](http://evinci.oss-cn-hangzhou.aliyuncs.com/evinci/image-20220830134542633.png)
    
    - 一个是`用户管理`, 其中包括`修改密码` `退出登录`
    
-   ​							![image-20220830134808365](E:\Typora\ty_Photo\image-20220830134808365.png)	
+   ​							![image-20220830134808365](http://evinci.oss-cn-hangzhou.aliyuncs.com/evinci/image-20220830134808365.png)	
    
    
    
@@ -213,7 +213,7 @@
    
    **若点击管理员选项, 即会弹出`管理员登录界面`**
    
-   ![image-20220830115508779](E:\Typora\ty_Photo\image-20220830115508779.png)
+   ![image-20220830115508779](http://evinci.oss-cn-hangzhou.aliyuncs.com/evinci/image-20220830115508779.png)
    
    **在管理员登录后会显示`管理界面`**
    
@@ -221,17 +221,17 @@
    
    -  一个是`系统管理`, 其中包含`学生管理` `赛项管理` `竞赛管理` `获奖管理` `安全退出`
    
-     ![image-20220831110217870](E:\Typora\ty_Photo\image-20220831110217870.png)
+     ![image-20220831110217870](http://evinci.oss-cn-hangzhou.aliyuncs.com/evinci/image-20220831110217870.png)
    
      - 四个管理中分为`添加` 和 `查询/修改`两个功能板块
    
-       ​					![image-20220831110343245](E:\Typora\ty_Photo\image-20220831110343245.png)
+       ​					![image-20220831110343245](http://evinci.oss-cn-hangzhou.aliyuncs.com/evinci/image-20220831110343245.png)
    
-       ​					![image-20220831110352966](E:\Typora\ty_Photo\image-20220831110352966.png)	
+       ​					![image-20220831110352966](http://evinci.oss-cn-hangzhou.aliyuncs.com/evinci/image-20220831110352966.png)	
    
-       ​					![image-20220831110400600](E:\Typora\ty_Photo\image-20220831110400600.png)
+       ​					![image-20220831110400600](http://evinci.oss-cn-hangzhou.aliyuncs.com/evinci/image-20220831110400600.png)
    
-       ​					![image-20220831110409608](E:\Typora\ty_Photo\image-20220831110409608.png)
+       ​					![image-20220831110409608](http://evinci.oss-cn-hangzhou.aliyuncs.com/evinci/image-20220831110409608.png)
    
    - 一个是`查询统计`,  其中包含`查询学生获奖情况` `查询竞赛报名情况` `查询竞赛获奖情况` `统计学生获奖数量` , 还有一个分菜单`统计获奖学生信息`
    
@@ -257,9 +257,9 @@
    
      - 一个是以`时间和专业`为基准进行查询, 即统计**某个时间段内某个专业的**学生获奖信息
    
-   ![image-20220830133943309](E:\Typora\ty_Photo\image-20220830133943309.png)
+   ![image-20220830133943309](http://evinci.oss-cn-hangzhou.aliyuncs.com/evinci/image-20220830133943309.png)
    
-   ![image-20220830134132336](E:\Typora\ty_Photo\image-20220830134132336.png)
+   ![image-20220830134132336](http://evinci.oss-cn-hangzhou.aliyuncs.com/evinci/image-20220830134132336.png)
    
    
 
@@ -367,7 +367,7 @@ this.setExtendedState(Frame.MAXIMIZED_BOTH);
 
 完成`竞赛信息` `赛项信息` `学生信息` `组队信息`的`增删改查`
 
-![image-20220901220126312](E:\Typora\ty_Photo\image-20220901220126312.png)
+![image-20220901220126312](http://evinci.oss-cn-hangzhou.aliyuncs.com/evinci/image-20220901220126312.png)
 
 管理员模式中的`系统管理`模式已经完成
 
@@ -377,7 +377,7 @@ this.setExtendedState(Frame.MAXIMIZED_BOTH);
 
 完成`查询统计`中的内容
 
-![image-20220901220218803](E:\Typora\ty_Photo\image-20220901220218803.png)
+![image-20220901220218803](http://evinci.oss-cn-hangzhou.aliyuncs.com/evinci/image-20220901220218803.png)
 
 添加以下几个`view`包中的类
 
@@ -404,8 +404,8 @@ AdminCntRwdStuInfoTimeInterFrm
 
 `怎么进行竞赛组队`和`竞赛报名的具体方式`, 这两个问题可以在第八天的时候好好想一想, 以便在假期中直接有思路去进行
 
-![image-20220901223156034](E:\Typora\ty_Photo\image-20220901223156034.png)
+![image-20220901223156034](http://evinci.oss-cn-hangzhou.aliyuncs.com/evinci/image-20220901223156034.png)
 
-![image-20220901223207649](E:\Typora\ty_Photo\image-20220901223207649.png)
+![image-20220901223207649](http://evinci.oss-cn-hangzhou.aliyuncs.com/evinci/image-20220901223207649.png)
 
-![image-20220901223236548](E:\Typora\ty_Photo\image-20220901223236548.png)
+![image-20220901223236548](http://evinci.oss-cn-hangzhou.aliyuncs.com/evinci/image-20220901223236548.png)
